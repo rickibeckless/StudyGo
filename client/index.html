@@ -1,0 +1,56 @@
+<!--
+    this is the home page and displays all the subjects
+-->
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="./style.css">
+        <link rel="stylesheet" href="./css/mainStyles.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+        <script src="./scripts/indexScript.js" defer></script>
+        <title>StudyGo</title>
+    </head>
+    <body>
+        <header id="main-header">
+            <h1 id="main-logo"><a href="/">StudyGo</a></h1>
+            <nav id="main-navbar">
+                <ul>
+                    <li><a href="/subjects">Subjects</a></li>
+                    <li><a href="/classes/all">Classes</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main id="main-body">
+            <section id="main-section">
+                <h2 id="main-section-title">Welcome to StudyGo</h2>
+                <p id="main-section-description">The best place to learn and study online.</p>
+                <a id="main-section-button" href="#">Get Started</a>
+            </section>
+            <section>
+                <h2>Subjects</h2>
+                <ul id="subject-list">
+                    <li id="default-li">Nothing yet! <a href="#">Add some subjects</a> to get started!</li>
+                </ul>
+            </section>
+        </main>
+        
+        <footer id="main-footer">
+            <nav id="footer-navbar">
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Help</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+            <p id="footer-cr-statement">
+                Copyright &copy; 2024 <a id="footer-cr-link" href="https://github.com/rickibeckless" target="_blank" rel="noopener nofollow noreferrer" title="Ricki Beckless GitHub">Ricki Beckless</a>. All rights reserved.
+            </p>
+        </footer>
+    </body>
+</html>
