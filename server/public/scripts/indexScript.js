@@ -2,15 +2,15 @@ async function fetchSubjects() {
     const res = await fetch('/api/subjects');
     const subjects = await res.json();
     subjects.forEach(subject => displaySubject(subject));
-};
+}
 
 async function fetchClasses(subjectId) {
-    const res = await fetch(`/api/classes/subject/${subjectId}`);
+    const res = await fetch(`/api/classes/${subjectId}`);
     const classes = await res.json();
     classes.forEach(classes => displayClass(classes));
-};
+}
 
-let lastOpenedClassHolder = null;
+let lastOpenedClassDropdown = null;
 
 function displaySubject(subject) {
     const defaultLi = document.getElementById('default-li');
@@ -25,65 +25,123 @@ function displaySubject(subject) {
     subName.innerText = subject.name;
 
     subName.addEventListener('click', () => {
-        const classHolder = document.getElementById(`${subject.id}-class-holder`);
+        const classDropdown = document.getElementById(`${subject.id}-class-dropdown`);
 
-        if (lastOpenedClassHolder && lastOpenedClassHolder !== classHolder) {
-            lastOpenedClassHolder.classList.add('hidden-dropdown');
-        };
+        if (lastOpenedClassDropdown && lastOpenedClassDropdown !== classDropdown) {
+            lastOpenedClassDropdown.classList.add('hidden-dropdown');
+        }
 
-        classHolder.classList.toggle('hidden-dropdown');
+        classDropdown.classList.toggle('hidden-dropdown');
 
-        if (classHolder.childElementCount === 0) {
+        if (classDropdown.childElementCount === 0) {
             fetchClasses(subject.id);
-        };
+        }
 
-        lastOpenedClassHolder = classHolder;
+        lastOpenedClassDropdown = classDropdown;
     });
 
-    const classHolder = document.createElement('ul');
-    classHolder.classList.add('class-holder', 'hidden-dropdown'); 
-    classHolder.id = `${subject.id}-class-holder`;
+    const classDropdown = document.createElement('ul');
+    classDropdown.classList.add('class-dropdown', 'hidden-dropdown'); 
+    classDropdown.id = `${subject.id}-class-dropdown`;
 
     subHolder.appendChild(subName);
     subList.appendChild(subHolder);
-    subHolder.appendChild(classHolder);
+    subHolder.appendChild(classDropdown);
     defaultLi.style.display = 'none';
-};
+}
 
-function hideAllClassHolders() {
-    const allClassHolders = document.querySelectorAll('.class-holder');
-    allClassHolders.forEach(classHolder => {
-        classHolder.classList.add('hidden-dropdown'); 
+function hideAllClassDropdowns() {
+    const allClassDropdowns = document.querySelectorAll('.class-dropdown');
+    allClassDropdowns.forEach(classDropdown => {
+        classDropdown.classList.add('hidden-dropdown'); 
     });
-};
+}
 
 function displayClass(classes) {
-    const classHolder = document.getElementById(`${classes.subjectId}-class-holder`);
+    const classDropdown = document.getElementById(`${classes.subjectId}-class-dropdown`);
 
-    const existingClasses = Array.from(classHolder.getElementsByTagName('li'));
+    const existingClasses = Array.from(classDropdown.getElementsByTagName('li'));
     const isAlreadyAdded = existingClasses.some(classElement => classElement.innerText === classes.name);
 
     if (!isAlreadyAdded) {
-        const classNameHolder = document.createElement('li');
-        classNameHolder.classList.add('class-name-holder');
+        const classHolder = document.createElement('div');
+        classHolder.classList.add('class-holder');
+        classHolder.id = `${classes.id}-class-holder`;
 
-        const className = document.createElement('a');
+        const className = document.createElement('li');
         className.classList.add('class');
-        className.href = `${classes.subjectId}/${classes.id}`;
-        className.title = className.href;
+        className.id = `${classes.id}-class`;
         className.innerText = classes.name;
 
-        // className.addEventListener('click', () => {
-        //     navigateToClass(classes.subjectId, classes.id);
-        // });
+        className.addEventListener('click', () => {
+            fetchUnits(classes.subjectId, classes.id);
 
-        classNameHolder.appendChild(className);
-        classHolder.appendChild(classNameHolder);
+            const unitDropdown = document.getElementById(`${classes.id}-unit-dropdown`);
+            if (unitDropdown) {
+                unitDropdown.classList.toggle('hidden-dropdown');
+            }
+        });
+
+        classDropdown.appendChild(classHolder);
+        classHolder.appendChild(className);
     }
-};
+}
 
-// function navigateToClass(subjectId, classId) {
-//     window.location.href = `/classes/subject/${subjectId}/${classId}`;
-// }
+async function fetchUnits(subjectId, classId) {
+    const res = await fetch(`/api/classes/${subjectId}/${classId}`);
+    const data = await res.json();
+    console.log(data);
+
+    const classHolder = document.getElementById(`${classId}-class-holder`);
+    let unitDropdown = document.getElementById(`${classId}-unit-dropdown`);
+
+    if (!unitDropdown) {
+        unitDropdown = document.createElement('ul');
+        unitDropdown.classList.add('unit-dropdown', 'hidden-dropdown');
+        unitDropdown.id = `${classId}-unit-dropdown`;
+
+        classHolder.appendChild(unitDropdown);
+    } else {
+        unitDropdown.innerHTML = '';
+    }
+
+    data.unitIds.forEach(unit => {
+        fetchUnit(unit, subjectId, classId);
+    });
+}
+
+async function fetchUnit(unitId, subjectId, classId) {
+    const res = await fetch(`/api/classes/${subjectId}/${classId}/${unitId}`);
+    const unit = await res.json();
+    console.log(unit);
+    displayUnit(unit, classId);
+}
+
+function displayUnit(unit, classId) {
+    const unitDropdown = document.getElementById(`${classId}-unit-dropdown`);
+
+    const unitItemHolder = document.createElement('li');
+    unitItemHolder.classList.add('unit-item-holder');
+
+    const unitItem = document.createElement('a');
+    unitItem.href = `/${unit.subjectId}/${classId}/${unit.id}`;
+    unitItem.title = unitItem.href;
+    unitItem.classList.add('unit');
+    unitItem.innerText = unit.name;
+
+    unitItemHolder.appendChild(unitItem);
+    unitDropdown.appendChild(unitItemHolder);
+}
+
+function hideAllUnitDropdowns() {
+    const allUnitDropdowns = document.querySelectorAll('.unit-dropdown');
+    allUnitDropdowns.forEach(unitDropdown => {
+        unitDropdown.classList.add('hidden-dropdown');
+    });
+}
+
+function navigateToClass(subjectId, classId) {
+    window.location.href = `/${subjectId}/${classId}`;
+}
 
 fetchSubjects();
