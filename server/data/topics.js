@@ -18,7 +18,7 @@ const topicsData = [
             "The numbers being added are called addends.",
             "The result of addition is called the sum."
         ],
-        "terms-definitions": [
+        "termdefs": [
             {
                 "term": "Addends",
                 "definition": "The numbers being added."
@@ -40,7 +40,7 @@ const topicsData = [
             "When adding decimals, line up the decimal points.",
             "If the numbers have different number of decimal places, add zeros to the right of the number with fewer decimal places."
         ],
-        "terms-definitions": [
+        "termdefs": [
             {
                 "term": "Decimal Point",
                 "definition": "A period used to separate the whole number part from the fractional part of a number."
@@ -62,7 +62,7 @@ const topicsData = [
             "When adding fractions, make sure the denominators are the same.",
             "If the denominators are different, find the least common denominator."
         ],
-        "terms-definitions": [
+        "termdefs": [
             {
                 "term": "Fractions",
                 "definition": "Numbers that represent parts of a whole."
@@ -85,7 +85,7 @@ const topicsData = [
             "The number being subtracted is called the subtrahend.",
             "The result of subtraction is called the difference."
         ],
-        "terms-definitions": [
+        "termdefs": [
             {
                 "term": "Subtrahend",
                 "definition": "The number being subtracted."
@@ -107,7 +107,7 @@ const topicsData = [
             "When subtracting decimals, line up the decimal points.",
             "If the numbers have different number of decimal places, add zeros to the right of the number with fewer decimal places."
         ],
-        "terms-definitions": [
+        "termdefs": [
             {
                 "term": "Decimal Point",
                 "definition": "A period used to separate the whole number part from the fractional part of a number."

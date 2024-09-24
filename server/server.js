@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import classesRoutes from './routes/classesRoutes.js';
 import subjectsRoutes from './routes/subjectsRoutes.js';
 import unitsRoutes from './routes/unitsRoutes.js';
+import topicsRoutes from './routes/topicsRoutes.js';
 
 const app = express();
 const router = express.Router();
@@ -23,6 +24,7 @@ app.use('/css', express.static(path.join(__dirname, '../client/css')));
 app.use('/api/classes', classesRoutes);
 app.use('/api/subjects', subjectsRoutes);
 app.use('/api/units', unitsRoutes);
+app.use('/api/topics', topicsRoutes);
 
 app.get('/:subjectId/:classId/:unitId', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/units.html'));
