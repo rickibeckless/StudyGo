@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+/* RESET STYLES */
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
+}
+
+body, .container {
+    min-height: 100dvh; /* temp */
+    min-width: 100vw;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* MAIN HEADER STYLES */
+
+#main-header {
+    display: flex;
+    border-bottom: 2px solid #000000;
+}
+
+#main-navbar ul {
+    display: flex;
+    flex-direction: row;
+}
+
+#main-navbar ul li {
+    list-style-type: none;
+    margin: 0 1rem;
+}
+
+/* LEFT NAV STYLES */
+
+#left-nav {
+    display: flex;
+
+
+    border-right: 2px solid #000000;
+}
+
+/* MAIN BODY STYLES */
+
+/* MAIN BODY NAV STYLES */
+
+#right-nav {
+    border-bottom: 2px solid #000000;
+}
+
+/* MAIN FOOTER STYLES */
+
+#main-footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    border-top: 2px solid #000000;
+}
+
+#footer-navbar {
+    width: 100%;
+}
+
+#footer-navbar ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#footer-navbar ul li {
+    list-style-type: none;
+    margin: 0 1rem;
+}
+
+/* GRID AREA STYLES */
+
+.container {
+    display: grid;
+    grid-template-columns: auto 2fr;
+    grid-template-rows: auto 1fr auto;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "main-header main-header"
+        "left-nav main-body"
+        "left-nav main-footer";
+}
+
+#main-header {
+    grid-area: main-header;
+}
+
+#left-nav {
+    grid-area: left-nav;
+}
+
+#main-body {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 2fr;
+    grid-auto-columns: 1fr;
+    grid-auto-rows: 1fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "right-nav"
+        ".";
+    grid-area: main-body;
+}
+
+#right-nav {
+    grid-area: right-nav;
+}
+
+#main-footer {
+    grid-area: main-footer;
+}

@@ -12,25 +12,29 @@
 
 <!doctype html>
 <html lang="en">
+
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"> -->
+        <link rel="stylesheet" href="/css/unitStyles.css">
+        <script src="/scripts/unitScript.js" defer></script>
         <title>StudyGo</title>
     </head>
-    <body>
-        <header id="main-header">
-            <h1 id="main-logo"><a href="/">StudyGo</a></h1>
-            <nav id="main-navbar">
-                <ul>
-                    <li><a href="/subjects">Subject</a></li>
-                    <li><a href="/classes">Class</a></li>
-                    <li><a href="">Unit</a></li>
-                </ul>
-            </nav>
-        </header>
 
-        <main id="main-body">
+    <body>
+        <div class="container">
+            <header id="main-header">
+                <h1 id="main-logo"><a href="/">StudyGo</a></h1>
+                <nav id="main-navbar">
+                    <ul>
+                        <li><a href="/subjects">Subject</a></li>
+                        <li><a href="/classes">Class</a></li>
+                        <li><a href="">Unit</a></li>
+                    </ul>
+                </nav>
+            </header>
+
             <aside id="left-nav">
                 <div id="left-nav-search">
                     <input type="text" id="left-nav-search-input" placeholder="Search topics...">
@@ -43,7 +47,7 @@
                 </nav>
             </aside>
 
-            <section>
+            <main id="main-body">
                 <nav id="right-nav">
                     <ul id="right-nav-list">
 
@@ -53,22 +57,25 @@
                 <section id="right-content">
 
                 </section>
-            </section>
-        </main>
-        
-        <footer id="main-footer">
-            <nav id="footer-navbar">
-                <ul>
-                    <li><a href="">About</a></li>
-                    <li><a href="">Terms of Service</a></li>
-                    <li><a href="">Privacy Policy</a></li>
-                    <li><a href="">Help</a></li>
-                    <li><a href="">Contact</a></li>
-                </ul>
-            </nav>
-            <p id="footer-cr-statement">
-                Copyright &copy; 2024 <a id="footer-cr-link" href="https://github.com/rickibeckless" target="_blank" rel="noopener nofollow noreferrer" title="Ricki Beckless GitHub">Ricki Beckless</a>. All rights reserved.
-            </p>
-        </footer>
+            </main>
+
+            <footer id="main-footer">
+                <nav id="footer-navbar">
+                    <ul>
+                        <li><a href="">About</a></li>
+                        <li><a href="">Terms of Service</a></li>
+                        <li><a href="">Privacy Policy</a></li>
+                        <li><a href="">Help</a></li>
+                        <li><a href="">Contact</a></li>
+                    </ul>
+                </nav>
+                <p id="footer-cr-statement">
+                    Copyright &copy; 2024 <a id="footer-cr-link" href="https://github.com/rickibeckless" target="_blank"
+                        rel="noopener nofollow noreferrer" title="Ricki Beckless GitHub">Ricki Beckless</a>. All rights
+                    reserved.
+                </p>
+            </footer>
+        </div>
     </body>
+
 </html>
