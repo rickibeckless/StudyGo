@@ -1,9 +1,11 @@
 import express from 'express';
-import { getClasses, getClassesBySubject } from '../controllers/classesControllers.js';
+import { getClasses, getClassesBySubject, getUnitsByClass, getUnitsById } from '../controllers/classesControllers.js';
 
 const router = express.Router();
 
 router.get('/', getClasses);
-router.get('/subject/:subjectId', getClassesBySubject);
+router.get('/:subjectId', getClassesBySubject);
+router.get('/:subjectId/:classId', getUnitsByClass);
+router.get('/:subjectId/:classId/:unitId', getUnitsById);
 
 export default router;

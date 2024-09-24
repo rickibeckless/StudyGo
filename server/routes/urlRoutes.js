@@ -7,6 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 router.get('/', (req, res) => {
+    console.log("HEY2");
     res.sendFile(path.join(__dirname, '../../client/index.html'));
 });
 
@@ -15,6 +16,7 @@ router.get('/classes', (req, res) => {
 });
 
 router.get('/subjects', (req, res) => {
+    console.log("HEY");
     res.sendFile(path.join(__dirname, '../../client/public/subjects.html'));
 });
 
@@ -31,4 +33,3 @@ router.get('/topics', (req, res) => {
 });
 
 export default router;
-

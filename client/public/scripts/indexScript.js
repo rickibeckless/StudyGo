@@ -64,19 +64,18 @@ function displayClass(classes) {
     const isAlreadyAdded = existingClasses.some(classElement => classElement.innerText === classes.name);
 
     if (!isAlreadyAdded) {
-        const className = document.createElement('li');
+        const classNameHolder = document.createElement('li');
+        classNameHolder.classList.add('class-name-holder');
+
+        const className = document.createElement('a');
+        className.classList.add('class');
+        className.href = `${classes.subjectId}/${classes.id}`;
+        className.title = className.href;
         className.innerText = classes.name;
 
-        className.addEventListener('click', () => {
-            navigateToClass(classes.subjectId, classes.id);
-        });
-
-        classHolder.appendChild(className);
+        classNameHolder.appendChild(className);
+        classHolder.appendChild(classNameHolder);
     }
 };
-
-function navigateToClass(subjectId, classId) {
-    window.location.href = `/subject/${subjectId}/${classId}`;
-}
 
 fetchSubjects();
