@@ -34,6 +34,10 @@ app.get('/:subjectId/:classId', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/classes.html'));
 });
 
+app.get('/:subjectId', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/classes.html'));
+});
+
 app.get('/classes', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/classes.html'));
 });

@@ -1,6 +1,9 @@
 async function fetchSubjects() {
     const res = await fetch('/api/subjects');
     const subjects = await res.json();
+
+    subjects.sort((a, b) => b.classIds.length - a.classIds.length);
+    subjects.splice(5);
     subjects.forEach(subject => displaySubject(subject));
 }
 
@@ -24,6 +27,16 @@ function displaySubject(subject) {
     subName.classList.add('subject');
     subName.innerText = subject.name;
 
+    const viewAllClassesLink = document.createElement('a');
+    viewAllClassesLink.href = `/${subject.id}`;
+    viewAllClassesLink.title = viewAllClassesLink.href;
+    viewAllClassesLink.classList.add('view-all-classes-link', 'hidden-class-link');
+    viewAllClassesLink.innerText = `(all ${subject.name} classes \u2192)`;
+
+    const subDescription = document.createElement('p');
+    subDescription.classList.add('subject-description', 'hidden-description');
+    subDescription.innerText = subject.description;
+
     subName.addEventListener('click', () => {
         const classDropdown = document.getElementById(`${subject.id}-class-dropdown`);
 
@@ -38,13 +51,18 @@ function displaySubject(subject) {
         }
 
         lastOpenedClassDropdown = classDropdown;
+
+        subDescription.classList.remove('hidden-description');
+        viewAllClassesLink.classList.remove('hidden-class-link');
     });
 
     const classDropdown = document.createElement('ul');
     classDropdown.classList.add('class-dropdown', 'hidden-dropdown'); 
     classDropdown.id = `${subject.id}-class-dropdown`;
 
+    subName.appendChild(viewAllClassesLink);
     subHolder.appendChild(subName);
+    subHolder.appendChild(subDescription);
     subList.appendChild(subHolder);
     subHolder.appendChild(classDropdown);
     defaultLi.style.display = 'none';
@@ -56,8 +74,9 @@ function handleMainBtnClick() {
     const mainBtn = document.getElementById('main-section-button');
     const subjectSection = document.getElementById('subjects-section');
 
+    // used mainBtn to scroll to the top of the subjects section because of sticky header
     mainBtn.addEventListener('click', () => {
-        subjectSection.scrollIntoView({ behavior: 'smooth' });
+        mainBtn.scrollIntoView({ behavior: 'smooth' });
     });
 }
 
