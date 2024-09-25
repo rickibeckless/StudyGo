@@ -73,12 +73,12 @@ function displayClass(classes) {
         className.id = `${classes.id}-class`;
         className.innerText = classes.name;
 
-        className.addEventListener('click', () => {
-            fetchUnits(classes.subjectId, classes.id);
-
+        className.addEventListener('click', async () => {
+            await fetchUnits(classes.subjectId, classes.id);
+        
             const unitDropdown = document.getElementById(`${classes.id}-unit-dropdown`);
             if (unitDropdown) {
-                unitDropdown.classList.toggle('hidden-dropdown');
+                unitDropdown.classList.remove('hidden-dropdown');
             }
         });
 
@@ -90,7 +90,6 @@ function displayClass(classes) {
 async function fetchUnits(subjectId, classId) {
     const res = await fetch(`/api/classes/${subjectId}/${classId}`);
     const data = await res.json();
-    console.log(data);
 
     const classHolder = document.getElementById(`${classId}-class-holder`);
     let unitDropdown = document.getElementById(`${classId}-unit-dropdown`);
@@ -99,21 +98,18 @@ async function fetchUnits(subjectId, classId) {
         unitDropdown = document.createElement('ul');
         unitDropdown.classList.add('unit-dropdown', 'hidden-dropdown');
         unitDropdown.id = `${classId}-unit-dropdown`;
-
         classHolder.appendChild(unitDropdown);
     } else {
         unitDropdown.innerHTML = '';
     }
 
-    data.unitIds.forEach(unit => {
-        fetchUnit(unit, subjectId, classId);
-    });
+    const unitFetchPromises = data.unitIds.map(unit => fetchUnit(unit, subjectId, classId));
+    await Promise.all(unitFetchPromises);
 }
 
 async function fetchUnit(unitId, subjectId, classId) {
     const res = await fetch(`/api/classes/${subjectId}/${classId}/${unitId}`);
     const unit = await res.json();
-    console.log(unit);
     displayUnit(unit, classId);
 }
 

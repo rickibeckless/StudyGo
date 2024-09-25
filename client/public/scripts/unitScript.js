@@ -2,7 +2,27 @@ const subjectId = window.location.pathname.split('/')[1];
 const classId = window.location.pathname.split('/')[2];
 const unitId = window.location.pathname.split('/')[3];
 
-console.log(`subjectId, classId, unitId: ${subjectId}, ${classId}, ${unitId}`);
+const currentTopic = localStorage.getItem('currentTopic');
+const currentSubTopicType = localStorage.getItem('currentSubTopicType');
+const currentSubTopicId = localStorage.getItem('currentSubTopic-topicId');
+const currentSubTopicFullId = localStorage.getItem('currentSubTopic-id');
+
+// navigate to the current topic and subtopic
+
+// async function navigateToCurrentTopic() {
+//     if (currentTopic) {
+//         const topicItem = document.getElementById(currentTopic);
+//         if (topicItem) {
+//             topicItem.click();
+//         }
+//         const subTopicItem = document.getElementById(currentSubTopicId);
+//         if (subTopicItem) {
+//             subTopicItem.click();
+//         }
+//         displayRightNavContent();
+//         //displayRightContent();
+//     }
+// }
 
 async function fetchSubject() {
     const res = await fetch(`/api/subjects/${subjectId}`);
@@ -29,8 +49,8 @@ async function fetchUnit() {
 async function fetchTopics() {
     const res = await fetch(`/api/topics/${subjectId}/${classId}/${unitId}`);
     const topics = await res.json();
-    console.log(topics);
     displayTopics(topics);
+    displayIntroOutroTopics();
 }
 
 function displaySubjectName(subjectName) {
@@ -68,17 +88,17 @@ function displayTopics(topics) {
         topicDropdown.classList.add('topic-dropdown', 'hidden-dropdown');
         topicDropdown.id = `${topic.id}-topic-dropdown`;
         topicItemHolder.appendChild(topicDropdown);
-        
+
         const topicNotes = topic.notes;
         const topicTermdefs = topic.termdefs;
 
-        console.log("topicNotes: ", topicNotes);
-        console.log("topicTermdefs: ", topicTermdefs);
+        //console.log("topicNotes: ", topicNotes);
+        //console.log("topicTermdefs: ", topicTermdefs);
 
         const subTopicTotalIndex = document.createElement('span');
         subTopicTotalIndex.innerText = topicNotes.length + topicTermdefs.length;
         subTopicTotalIndex.classList.add('sub-topic-total-index');
-        console.log(topic.name, "subTopicTotalIndex: ", subTopicTotalIndex);
+        //console.log(topic.name, "subTopicTotalIndex: ", subTopicTotalIndex);
 
         topicItem.appendChild(subTopicTotalIndex);
 
@@ -112,6 +132,7 @@ function displayTopics(topics) {
             localStorage.setItem('currentTopic', topic.name);
             localStorage.setItem('currentSubTopicType', 'notes');
             localStorage.setItem('currentSubTopic-topicId', topic.id);
+            localStorage.setItem('currentSubTopic-id', `${topic.id}-notes`);
             //selectedIndex.innerText = subTopics[0].length;
             displayRightNavContent();
             displayRightContent(topicNotes);
@@ -121,6 +142,7 @@ function displayTopics(topics) {
             localStorage.setItem('currentTopic', topic.name);
             localStorage.setItem('currentSubTopicType', 'termdefs');
             localStorage.setItem('currentSubTopic-topicId', topic.id);
+            localStorage.setItem('currentSubTopic-id', `${topic.id}-termdefs`);
             //selectedIndex.innerText = subTopics[1].length;
             displayRightNavContent();
             displayRightContent(topicTermdefs);
@@ -130,15 +152,44 @@ function displayTopics(topics) {
             toggleTopicDropdown(topic);
         });
     });
+
+    //navigateToCurrentTopic();
 };
 
 function toggleTopicDropdown(topic) {
-    console.log("clicked: ", topic);
     const topicDropdown = document.getElementById(`${topic.id}-topic-dropdown`);
     if (topicDropdown) {
         topicDropdown.classList.toggle('hidden-dropdown');
     };
 };
+
+function displayIntroOutroTopics() {
+    const introTopic = document.createElement('li');
+    introTopic.classList.add('topic-item');
+    introTopic.innerText = 'Overview';
+    introTopic.id = `${unitId}-intro-topic`;
+    introTopic.addEventListener('click', () => {
+        localStorage.setItem('currentTopic', `${unitId}-main-overview`);
+        localStorage.setItem('currentSubTopicType', 'main-overview');
+        localStorage.removeItem('currentSubTopic-topicId');
+        localStorage.removeItem('currentSubTopic-id');
+    });
+
+    const outroTopic = document.createElement('li');
+    outroTopic.classList.add('topic-item');
+    outroTopic.innerText = 'Summary';
+    outroTopic.id = `${unitId}-outro-topic`;
+    outroTopic.addEventListener('click', () => {
+        localStorage.setItem('currentTopic', `${unitId}-main-summary`);
+        localStorage.setItem('currentSubTopicType', 'main-summary');
+        localStorage.removeItem('currentSubTopic-topicId');
+        localStorage.removeItem('currentSubTopic-id');
+    });
+
+    const topicList = document.getElementById('left-nav-topics-list');
+    topicList.insertBefore(introTopic, topicList.firstChild);
+    topicList.appendChild(outroTopic);
+}
 
 function displayRightNavContent() {
     const rightNav = document.getElementById('right-nav');
@@ -149,8 +200,9 @@ function displayRightNavContent() {
     const currentTopic = localStorage.getItem('currentTopic');
     const currentSubTopicType = localStorage.getItem('currentSubTopicType');
     const currentSubTopicId = localStorage.getItem('currentSubTopic-topicId');
+
     const currentSubTopic = currentSubTopicType === 'notes' ? 'Notes' : 'Term/Definitions';
-    console.log("currentSubTopic: ", currentSubTopic);
+
     if (currentSubTopic) {
         const currentTopicHolder = document.createElement('li');
         currentTopicHolder.classList.add('current-topic-holder');
@@ -163,6 +215,10 @@ function displayRightNavContent() {
         const nextSubTopicBtn = document.createElement('button');
         nextSubTopicBtn.id = 'next-sub-topic-btn';
         nextSubTopicBtn.innerText = 'Next';
+
+        nextSubTopicBtn.addEventListener('click', () => {
+            goToNextSubTopic();
+        });
 
         const rightNavDivider = document.createElement('li');
         rightNavDivider.classList.add('right-nav-divider');
@@ -179,69 +235,94 @@ function displayRightNavContent() {
     };
 };
 
+function goToNextSubTopic() {
+    const currentSubTopic = localStorage.getItem('currentSubTopicType');
+    const currentSubTopicId = localStorage.getItem('currentSubTopic-topicId');
+    const currentSubTopicFullId = localStorage.getItem('currentSubTopic-id');
+
+    const topicDropdown = document.getElementById(`${currentSubTopicId}-topic-dropdown`);
+    const topicDropdownItems = topicDropdown.childNodes;
+    const topicDropdownItemsArray = Array.from(topicDropdownItems);
+
+    const nextSubTopicIndex = topicDropdownItemsArray.findIndex(item => item.id === currentSubTopicFullId) + 1;
+    const nextSubTopic = topicDropdownItemsArray[nextSubTopicIndex];
+
+    if (nextSubTopic) {
+        nextSubTopic.click();
+    } else {
+        const topicItemHolder = document.getElementById(`${currentSubTopicId}-topic-item-holder`);
+        const nextTopicItemHolder = topicItemHolder.nextElementSibling;
+        
+        if (nextTopicItemHolder) {
+            const nextSubTopic = nextTopicItemHolder.childNodes[1].childNodes[0];
+            if (nextSubTopic) {
+                if (nextTopicItemHolder.childNodes[1].classList.contains('hidden-dropdown')) {
+                    nextTopicItemHolder.firstChild.click();
+                }
+                nextSubTopic.click();
+            }
+        }
+    };
+};
+
 function displayRightContent(content) {
     const rightContent = document.getElementById('right-content');
-    const currentTopic = localStorage.getItem('currentTopic');
+    rightContent.innerHTML = '';
+
     const currentSubTopicType = localStorage.getItem('currentSubTopicType');
-    const currentSubTopicId = localStorage.getItem('currentSubTopic-topicId');
+
     const currentSubTopic = currentSubTopicType === 'notes' ? 'Notes' : 'Term/Definitions';
-    console.log("currentSubTopic: ", currentSubTopic);
     if (currentSubTopic === 'Notes') {
-        rightContent.innerHTML = '';
         content.forEach(note => {
-            const noteHolder = document.createElement('div');
+            const noteHolder = document.createElement('ul');
             noteHolder.classList.add('note-holder');
-            noteHolder.innerText = note;
+
+            const noteItem = document.createElement('li');
+            noteItem.classList.add('note');
+            noteItem.innerText = note;
+
+            noteHolder.appendChild(noteItem);
             rightContent.appendChild(noteHolder);
         });
     } else if (currentSubTopic === "Term/Definitions") {
-
-        console.log(content)
-
         content.forEach(termdef => {
-            console.log(termdef);
-
             const termdefHolder = document.createElement('div');
             termdefHolder.classList.add('termdef-holder');
 
-            const term = document.createElement('p');
+            const term = document.createElement('h4');
             term.classList.add('term');
             term.innerText = termdef.term;
 
-            const definition = document.createElement('p');
-            definition.classList.add('definition');
-            definition.innerText = termdef.definition;
+            const definitionHolder = document.createElement('ul')
+            definitionHolder.classList.add('definition-holder');
+
+            if (Array.isArray(termdef.definition)) {
+                termdef.definition.forEach(definition => {
+                    const definitionItem = document.createElement('li');
+                    definitionItem.classList.add('definition');
+                    definitionItem.innerHTML = `
+                        <span class="definition-bullet">\u2605</span>
+                        ${definition}
+                    `;
+                    definitionHolder.appendChild(definitionItem);
+                });
+            } else {
+                const definition = document.createElement('li');
+                definition.classList.add('definition');
+                definition.innerHTML = `
+                    <span class="definition-bullet">\u2605</span>
+                    ${termdef.definition}
+                `;
+
+                definitionHolder.appendChild(definition);
+            }
 
             termdefHolder.appendChild(term);
-            termdefHolder.appendChild(definition);
-            
+            termdefHolder.appendChild(definitionHolder);
             rightContent.appendChild(termdefHolder);
         });
-        
     };
-
-    const test = document.createElement('div');
-    test.innerHTML = `
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. <b>Sed fac ista esse non inportuna;</b> Quodsi, ne quo incommodo afficiare, non relinques amicum, tamen, ne sine fructu alligatus sis, ut moriatur optabis. Dolor ergo, id est summum malum, metuetur semper, etiamsi non aderit; Nisi autem rerum natura perspecta erit, nullo modo poterimus sensuum iudicia defendere. Duo Reges: constructio interrete. Zeno autem, quod suam, quod propriam speciem habeat, cur appetendum sit, id solum bonum appellat, beatam autem vitam eam solam, quae cum virtute degatur. Non enim iam stirpis bonum quaeret, sed animalis. Tum Piso: Quoniam igitur aliquid omnes, quid Lucius noster? Bonum negas esse divitias, praeposìtum esse dicis? </p>
-
-        <p>Quamquam scripsit artem rhetoricam Cleanthes, Chrysippus etiam, sed sic, ut, si quis obmutescere concupierit, nihil aliud legere debeat. Non prorsus, inquit, omnisque, qui sine dolore sint, in voluptate, et ea quidem summa, esse dico. Nunc omni virtuti vitium contrario nomine opponitur. Ex quo intellegitur idem illud, solum bonum esse, quod honestum sit, idque esse beate vivere: honeste, id est cum virtute, vivere. Est autem a te semper dictum nec gaudere quemquam nisi propter corpus nec dolere. <i>Dici enim nihil potest verius.</i> Nam constitui virtus nullo modo potesti nisi ea, quae sunt prima naturae, ut ad summam pertinentia tenebit. In enumerandis autem corporis commodis si quis praetermissam a nobis voluptatem putabit, in aliud tempus ea quaestio differatur. Est autem eius generis actio quoque quaedam, et quidem talis, ut ratio postulet agere aliquid et facere eorum. </p>
-
-        <p>Quid tanto concursu honestissimorum studiorum, tanto virtutum comitatu, si ea nullam ad aliam rem nisi ad voluptatem conquiruntur? Cum autem dispicere coepimus et sentire quid, simus et quid ab animantibus ceteris differamus, tum ea sequi incipimus, ad quae nati sumus. Sed emolumenta communia esse dicuntur, recte autem facta et peccata non habentur communia. <i>At multis malis affectus.</i> Quae hic rei publicae vulnera inponebat, eadem ille sanabat. Sed ita falsa sunt ea, quae consequuntur, ut illa, e quibus haec nata sunt, vera esse non possint. Neque enim civitas in seditione beata esse potest nec in discordia dominorum domus; Nam prius a se poterit quisque discedere quam appetitum earum rerum, quae sibi conducant, amittere. Egone non intellego, quid sit don Graece, Latine voluptas? Princeps huius civitatis Phalereus Demetrius cum patria pulsus esset iniuria, ad Ptolomaeum se regem Alexandream contulit. </p>
-
-        <p>Quae quidem res efficit, ne necesse sit isdem de rebus semper quasi dictata decantare neque a commentariolis suis discedere. Cur igitur, inquam, res tam dissimiles eodem nomine appellas? Sed est forma eius disciplinae, sicut fere ceterarum, triplex: una pars est naturae, disserendi altera, vivendi tertia. Ab his oratores, ab his imperatores ac rerum publicarum principes extiterunt. Est tamen ea secundum naturam multoque nos ad se expetendam magis hortatur quam superiora omnia. Illa sunt similia: hebes acies est cuipiam oculorum, corpore alius senescit; </p>
-
-        <p>Non minor, inquit, voluptas percipitur ex vilissimis rebus quam ex pretiosissimis. Nec vero intermittunt aut admirationem earum rerum, quae sunt ab antiquis repertae, aut investigationem novarum. Duarum enim vitarum nobis erunt instituta capienda. Nobis Heracleotes ille Dionysius flagitiose descivisse videtur a Stoicis propter oculorum dolorem. Qui autem esse poteris, nisi te amor ipse ceperit? <b>Illa tamen simplicia, vestra versuta.</b> </p>
-
-        <p>Ille igitur vidit, non modo quot fuissent adhuc philosophorum de summo bono, sed quot omnino esse possent sententiae. <a href="http://loripsum.net/" target="_blank">Hoc ipsum elegantius poni meliusque potuit.</a> Quae etsi mihi nullo modo probantur, tamen Democritum laudatum a ceteris ab hoc, qui eum unum secutus esset, nollem vituperatum. Habes undique expletam et perfectam, Torquate, formam honestatis, quae tota quattuor his virtutibus, quae a te quoque commemoratae sunt, continetur. Huc et illuc, Torquate, vos versetis licet, nihil in hac praeclara epistula scriptum ab Epicuro congruens et conveniens decretis eius reperietis. Epicurus autem cum in prima commendatione voluptatem dixisset, si eam, quam Aristippus, idem tenere debuit ultimum bonorum, quod ille; </p>
-
-        <p>Cetera illa adhibebat, quibus demptis negat se Epicurus intellegere quid sit bonum. Sed mehercule pergrata mihi oratio tua. Fortitudinis quaedam praecepta sunt ac paene leges, quae effeminari virum vetant in dolore. Quod autem ratione actum est, id officium appellamus. <i>Ecce aliud simile dissimile.</i> Quid ergo attinet gloriose loqui, nisi constanter loquare? Nam illud quidem adduci vix possum, ut ea, quae senserit ille, tibi non vera videantur. At quanta conantur! Mundum hunc omnem oppidum esse nostrum! Incendi igitur eos, qui audiunt, vides. Illud dico, ea, quae dicat, praeclare inter se cohaerere. Beatus autem esse in maximarum rerum timore nemo potest. Ita fit illa conclusio non solum vera, sed ita perspicua, ut dialectici ne rationem quidem reddi putent oportere: si illud, hoc; Varietates autem iniurasque fortunae facile veteres philosophorum praeceptis instituta vita superabat. <i>Itaque hic ipse iam pridem est reiectus;</i> <b>An hoc usque quaque, aliter in vita?</b> </p>
-
-        <p>Nos quidem Virtutes sic natae sumus, ut tibi serviremus, aliud negotii nihil habemus. <a href="http://loripsum.net/" target="_blank">Est, ut dicis, inquit;</a> Hic, qui utrumque probat, ambobus debuit uti, sicut facit re, neque tamen dividit verbis. Sit hoc ultimum bonorum, quod nunc a me defenditur; Si enim ita est, vide ne facinus facias, cum mori suadeas. Cave putes quicquam esse verius. Ex quo, id quod omnes expetunt, beate vivendi ratio inveniri et comparari potest. Negat enim tenuissimo victu, id est contemptissimis escis et potionibus, minorem voluptatem percipi quam rebus exquisitissimis ad epulandum. </p>
-
-        <p>Indicant pueri, in quibus ut in speculis natura cernitur. Aliis esse maiora, illud dubium, ad id, quod summum bonum dicitis, ecquaenam possit fieri accessio. Itaque hoc frequenter dici solet a vobis, non intellegere nos, quam dicat Epicurus voluptatem. Cur fortior sit, si illud, quod tute concedis, asperum et vix ferendum putabit? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Est enim effectrix multarum et magnarum voluptatum. Idcirco enim non desideraret, quia, quod dolore caret, id in voluptate est. </p>
-    `
-    rightContent.innerHTML = '';
-    //rightContent.appendChild(test);
-}
+};
 
 fetchSubject();
+//navigateToCurrentTopic();

@@ -24,9 +24,7 @@ const classesData = [
         "description": "Introduction to algebraic concepts",
         "subjectId": "UUnAetwV17vvuShPNJCJB",
         "unitIds": [
-            'Wubjo-PlGx8TJNAfuybRA',
-            'ZRnCFj7jxS0WLucm38vvf',
-            'qu03i0wa68-U2T5Yfvn2v',
+            
         ]
     },
     {
@@ -35,9 +33,16 @@ const classesData = [
         "description": "Introduction to geometric concepts",
         "subjectId": "UUnAetwV17vvuShPNJCJB",
         "unitIds": [
-            'KNUBH73fxbyET3xRm2xtj',
-            'abMkfrEB8wrivA1_NDa73',
-            '6OifCGefjW829ad4hdqfi',
+            
+        ]
+    },
+    {
+        "id": "LKMmCSvKr3Ao5sHZyzGF7",
+        "name": "Calculus",
+        "description": "Introduction to calculus concepts including limits, derivatives, and integrals.",
+        "subjectId": "UUnAetwV17vvuShPNJCJB",
+        "unitIds": [
+            "DLHmzUSfjCkQNL4VbhNpM",
         ]
     },
     {
@@ -46,9 +51,7 @@ const classesData = [
         "description": "Introduction to basic biology concepts",
         "subjectId": "HvpCcQk3uBH4N-G0Z4W7Q",
         "unitIds": [
-            'DwuRzWfUInKiorAP-EUzU', 
-            'VTFhuFZI6PtS6citMRBU6',
-            'Fg7GYXjK90BEcx3i8yeiH',
+
         ]
     },
     {
@@ -57,9 +60,7 @@ const classesData = [
         "description": "Introduction to basic chemistry concepts",
         "subjectId": "HvpCcQk3uBH4N-G0Z4W7Q",
         "unitIds": [
-            'Ar1cWH932mBZOXKyel50M',
-            '3H2FdrHGzQk3VLOgJn_4u', 
-            'k_6DxV8pqIiKSsWUT7vu4',
+            
         ]
     },
     {
@@ -68,9 +69,16 @@ const classesData = [
         "description": "Introduction to basic physics concepts",
         "subjectId": "HvpCcQk3uBH4N-G0Z4W7Q",
         "unitIds": [
-            '1U595eoNpWS9FRl04x39M', 
-            'FmFOMBvX1vHoIokpn0TQ6',
-            'PBy4jrQL1oJpv0QGBNXtz',
+            
+        ]
+    },
+    {
+        "id": "RyEoI9HQrclM9gLJhDx89",
+        "name": "Environmental Science",
+        "description": "Study of ecosystems, energy flow, and environmental impact.",
+        "subjectId": "HvpCcQk3uBH4N-G0Z4W7Q",
+        "unitIds": [
+            "eZzRhprJXjMZuXTcnqFi9",
         ]
     },
     {
@@ -79,9 +87,7 @@ const classesData = [
         "description": "Introduction to world history concepts",
         "subjectId": "GheaHQNuqrOcM6S_uc5Ox",
         "unitIds": [
-            'l3z5_YfzX-r7t7CY8S3ZT',
-            '9mTzv65FvkoI24NH8FW22', 
-            'dKG5U2r8_Mif5g8fr85cZ',
+            
         ]
     },
     {
@@ -90,9 +96,7 @@ const classesData = [
         "description": "Introduction to US history concepts",
         "subjectId": "GheaHQNuqrOcM6S_uc5Ox",
         "unitIds": [
-            'rBs7QfdVIHTuEWCz1hBFG', 
-            'cbQ_tGpifmGlpM6CH9XwP',
-            '0YvnFrnGQXgQAG3zQ2oI-',
+
         ]
     },
     {
@@ -101,9 +105,34 @@ const classesData = [
         "description": "Introduction to government concepts",
         "subjectId": "GheaHQNuqrOcM6S_uc5Ox",
         "unitIds": [
-            'UkcWcaq5jiLpjCzDOcJib',
-            'jiWqsI53og4NdGnRlgjby', 
-            'FEinNYBih2H7ni_X3OISG',
+            
+        ]
+    },
+    {
+        "id": "ZTChGslRvPmjy5IqZ_KON",
+        "name": "European History",
+        "description": "Examination of European history from the Middle Ages to the present.",
+        "subjectId": "GheaHQNuqrOcM6S_uc5Ox",
+        "unitIds": [
+            "UX8Vq1h2m6FNc5wq3cBQv",
+        ]
+    },
+    {
+        "id": "y6sMJuD5Q6A_X29iGjMnE",
+        "name": "English Literature",
+        "description": "Exploring major works of English literature from Chaucer to contemporary authors.",
+        "subjectId": "QX8Jb7XkFgLi4ZUjklY8T",
+        "unitIds": [
+            "uHgGjxFzc8dMWo7KPq9yJ",
+        ]
+    },
+    {
+        "id": "v2bEpFR5UCQks_nIDwnNc",
+        "name": "Introduction to Programming",
+        "description": "Basics of programming using Python. Includes data types, control structures, and functions.",
+        "subjectId": "d4l2O4JqI7QiYwxlQ1oLE",
+        "unitIds": [
+            "rwPxNgNFSRb9YOwXfh9pS",
         ]
     }
 ];

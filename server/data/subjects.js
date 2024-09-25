@@ -14,7 +14,8 @@ const subjectData = [
         "classIds": [
             "HRnC-GqvCbK6yFA1A9f-S", 
             "dtn_1xWqLr9iQEeRalIRO", 
-            "ssl-NirCJaiOWygAIotUc"
+            "ssl-NirCJaiOWygAIotUc",
+            "LKMmCSvKr3Ao5sHZyzGF7"
         ]
     },
     {
@@ -23,7 +24,8 @@ const subjectData = [
         "classIds": [
             "ODfd_0AwznO1kYaUaJ64d", 
             "q5JirzJIiAHMRCpPFyirM", 
-            "n4fL1RRwNN31i4DUj1sro"
+            "n4fL1RRwNN31i4DUj1sro",
+            "RyEoI9HQrclM9gLJhDx89"
         ]
     },
     {
@@ -32,7 +34,22 @@ const subjectData = [
         "classIds": [
             "zo3vl14a0aMNpM_bYjCcA", 
             "YWi0Dir0Y-QKyTzPcdp62", 
-            "MP48NKU0UEeDSpFHdooT6"
+            "MP48NKU0UEeDSpFHdooT6",
+            "ZTChGslRvPmjy5IqZ_KON"
+        ]
+    },
+    {
+        "id": "QX8Jb7XkFgLi4ZUjklY8T",
+        "name": "English",
+        "classIds": [
+            "y6sMJuD5Q6A_X29iGjMnE",
+        ]
+    },
+    {
+        "id": "d4l2O4JqI7QiYwxlQ1oLE",
+        "name": "Computer Science",
+        "classIds": [
+            "v2bEpFR5UCQks_nIDwnNc",
         ]
     }
 ];

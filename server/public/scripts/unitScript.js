@@ -2,7 +2,27 @@ const subjectId = window.location.pathname.split('/')[1];
 const classId = window.location.pathname.split('/')[2];
 const unitId = window.location.pathname.split('/')[3];
 
-console.log(`subjectId, classId, unitId: ${subjectId}, ${classId}, ${unitId}`);
+const currentTopic = localStorage.getItem('currentTopic');
+const currentSubTopicType = localStorage.getItem('currentSubTopicType');
+const currentSubTopicId = localStorage.getItem('currentSubTopic-topicId');
+const currentSubTopicFullId = localStorage.getItem('currentSubTopic-id');
+
+// navigate to the current topic and subtopic
+
+// async function navigateToCurrentTopic() {
+//     if (currentTopic) {
+//         const topicItem = document.getElementById(currentTopic);
+//         if (topicItem) {
+//             topicItem.click();
+//         }
+//         const subTopicItem = document.getElementById(currentSubTopicId);
+//         if (subTopicItem) {
+//             subTopicItem.click();
+//         }
+//         displayRightNavContent();
+//         //displayRightContent();
+//     }
+// }
 
 async function fetchSubject() {
     const res = await fetch(`/api/subjects/${subjectId}`);
@@ -29,8 +49,8 @@ async function fetchUnit() {
 async function fetchTopics() {
     const res = await fetch(`/api/topics/${subjectId}/${classId}/${unitId}`);
     const topics = await res.json();
-    console.log(topics);
     displayTopics(topics);
+    displayIntroOutroTopics();
 }
 
 function displaySubjectName(subjectName) {
@@ -44,8 +64,10 @@ function displayClassName(className) {
 }
 
 function displayUnit(unit) {
-    const unitLink = document.getElementById('unit-link');
+    const defaultUnitLink = document.getElementById('unit-link');
+    const unitLink = document.createElement('h3');
     unitLink.innerText = unit.name;
+    defaultUnitLink.parentNode.replaceChild(unitLink, defaultUnitLink);
 }
 
 function displayTopics(topics) {
@@ -67,29 +89,240 @@ function displayTopics(topics) {
         topicDropdown.id = `${topic.id}-topic-dropdown`;
         topicItemHolder.appendChild(topicDropdown);
 
-        const subTopics = [topic.notes, topic.termdefs];
+        const topicNotes = topic.notes;
+        const topicTermdefs = topic.termdefs;
 
-        subTopics.forEach(subTopic => {
-            subTopic.forEach(subTopicItem => {
-                const subTopicItemHolder = document.createElement('li');
-                subTopicItemHolder.classList.add('sub-topic-item');
-                subTopicItemHolder.innerText = subTopicItem;
-                topicDropdown.appendChild(subTopicItemHolder);
-            });
+        //console.log("topicNotes: ", topicNotes);
+        //console.log("topicTermdefs: ", topicTermdefs);
+
+        const subTopicTotalIndex = document.createElement('span');
+        subTopicTotalIndex.innerText = topicNotes.length + topicTermdefs.length;
+        subTopicTotalIndex.classList.add('sub-topic-total-index');
+        //console.log(topic.name, "subTopicTotalIndex: ", subTopicTotalIndex);
+
+        topicItem.appendChild(subTopicTotalIndex);
+
+        //const selectedIndex = document.createElement('span');
+        //selectedIndex.innerText = '0';
+
+        //const subTopics = [topic.notes, topic.termdefs];
+
+        // subTopics.forEach(subTopic => {
+        //     subTopic.forEach(subTopicItem => {
+        //         const subTopicItemHolder = document.createElement('li');
+        //         subTopicItemHolder.classList.add('sub-topic-item');
+        //         subTopicItemHolder.innerText = subTopicItem;
+        //         topicDropdown.appendChild(subTopicItemHolder);
+        //     });
+        // });
+
+        const notesHolder = document.createElement('li');
+        notesHolder.id = `${topic.id}-notes`;
+        notesHolder.classList.add('sub-topic-item');
+        notesHolder.innerText = 'Notes';
+        topicDropdown.appendChild(notesHolder);
+
+        const termdefsHolder = document.createElement('li');
+        termdefsHolder.id = `${topic.id}-termdefs`;
+        termdefsHolder.classList.add('sub-topic-item');
+        termdefsHolder.innerText = 'Term/Definitions';
+        topicDropdown.appendChild(termdefsHolder);
+
+        notesHolder.addEventListener('click', () => {
+            localStorage.setItem('currentTopic', topic.name);
+            localStorage.setItem('currentSubTopicType', 'notes');
+            localStorage.setItem('currentSubTopic-topicId', topic.id);
+            localStorage.setItem('currentSubTopic-id', `${topic.id}-notes`);
+            //selectedIndex.innerText = subTopics[0].length;
+            displayRightNavContent();
+            displayRightContent(topicNotes);
+        });
+
+        termdefsHolder.addEventListener('click', () => {
+            localStorage.setItem('currentTopic', topic.name);
+            localStorage.setItem('currentSubTopicType', 'termdefs');
+            localStorage.setItem('currentSubTopic-topicId', topic.id);
+            localStorage.setItem('currentSubTopic-id', `${topic.id}-termdefs`);
+            //selectedIndex.innerText = subTopics[1].length;
+            displayRightNavContent();
+            displayRightContent(topicTermdefs);
         });
 
         topicItem.addEventListener('click', () => {
             toggleTopicDropdown(topic);
         });
     });
-}
+
+    //navigateToCurrentTopic();
+};
 
 function toggleTopicDropdown(topic) {
-    console.log("clicked: ", topic);
     const topicDropdown = document.getElementById(`${topic.id}-topic-dropdown`);
     if (topicDropdown) {
         topicDropdown.classList.toggle('hidden-dropdown');
-    }
+    };
+};
+
+function displayIntroOutroTopics() {
+    const introTopic = document.createElement('li');
+    introTopic.classList.add('topic-item');
+    introTopic.innerText = 'Overview';
+    introTopic.id = `${unitId}-intro-topic`;
+    introTopic.addEventListener('click', () => {
+        localStorage.setItem('currentTopic', `${unitId}-main-overview`);
+        localStorage.setItem('currentSubTopicType', 'main-overview');
+        localStorage.removeItem('currentSubTopic-topicId');
+        localStorage.removeItem('currentSubTopic-id');
+    });
+
+    const outroTopic = document.createElement('li');
+    outroTopic.classList.add('topic-item');
+    outroTopic.innerText = 'Summary';
+    outroTopic.id = `${unitId}-outro-topic`;
+    outroTopic.addEventListener('click', () => {
+        localStorage.setItem('currentTopic', `${unitId}-main-summary`);
+        localStorage.setItem('currentSubTopicType', 'main-summary');
+        localStorage.removeItem('currentSubTopic-topicId');
+        localStorage.removeItem('currentSubTopic-id');
+    });
+
+    const topicList = document.getElementById('left-nav-topics-list');
+    topicList.insertBefore(introTopic, topicList.firstChild);
+    topicList.appendChild(outroTopic);
 }
 
+function displayRightNavContent() {
+    const rightNav = document.getElementById('right-nav');
+    const customRightNavBorder = document.createElement('div');
+    customRightNavBorder.id = 'custom-right-nav-border';
+
+    const rightNavList = document.getElementById('right-nav-list');
+    const currentTopic = localStorage.getItem('currentTopic');
+    const currentSubTopicType = localStorage.getItem('currentSubTopicType');
+    const currentSubTopicId = localStorage.getItem('currentSubTopic-topicId');
+
+    const currentSubTopic = currentSubTopicType === 'notes' ? 'Notes' : 'Term/Definitions';
+
+    if (currentSubTopic) {
+        const currentTopicHolder = document.createElement('li');
+        currentTopicHolder.classList.add('current-topic-holder');
+        currentTopicHolder.innerText = currentTopic;
+
+        const currentSubTopicHolder = document.createElement('li');
+        currentSubTopicHolder.classList.add('current-sub-topic-holder');
+        currentSubTopicHolder.innerText = currentSubTopic;
+
+        const nextSubTopicBtn = document.createElement('button');
+        nextSubTopicBtn.id = 'next-sub-topic-btn';
+        nextSubTopicBtn.innerText = 'Next';
+
+        nextSubTopicBtn.addEventListener('click', () => {
+            goToNextSubTopic();
+        });
+
+        const rightNavDivider = document.createElement('li');
+        rightNavDivider.classList.add('right-nav-divider');
+        rightNavDivider.innerText = '/';
+
+        rightNav.innerHTML = '';
+        rightNavList.innerHTML = '';
+        rightNavList.appendChild(currentTopicHolder);
+        rightNavList.appendChild(rightNavDivider);
+        rightNavList.appendChild(currentSubTopicHolder);
+        rightNavList.appendChild(nextSubTopicBtn);
+        rightNav.appendChild(rightNavList);
+        rightNav.appendChild(customRightNavBorder);
+    };
+};
+
+function goToNextSubTopic() {
+    const currentSubTopic = localStorage.getItem('currentSubTopicType');
+    const currentSubTopicId = localStorage.getItem('currentSubTopic-topicId');
+    const currentSubTopicFullId = localStorage.getItem('currentSubTopic-id');
+
+    const topicDropdown = document.getElementById(`${currentSubTopicId}-topic-dropdown`);
+    const topicDropdownItems = topicDropdown.childNodes;
+    const topicDropdownItemsArray = Array.from(topicDropdownItems);
+
+    const nextSubTopicIndex = topicDropdownItemsArray.findIndex(item => item.id === currentSubTopicFullId) + 1;
+    const nextSubTopic = topicDropdownItemsArray[nextSubTopicIndex];
+
+    if (nextSubTopic) {
+        nextSubTopic.click();
+    } else {
+        const topicItemHolder = document.getElementById(`${currentSubTopicId}-topic-item-holder`);
+        const nextTopicItemHolder = topicItemHolder.nextElementSibling;
+        
+        if (nextTopicItemHolder) {
+            const nextSubTopic = nextTopicItemHolder.childNodes[1].childNodes[0];
+            if (nextSubTopic) {
+                if (nextTopicItemHolder.childNodes[1].classList.contains('hidden-dropdown')) {
+                    nextTopicItemHolder.firstChild.click();
+                }
+                nextSubTopic.click();
+            }
+        }
+    };
+};
+
+function displayRightContent(content) {
+    const rightContent = document.getElementById('right-content');
+    rightContent.innerHTML = '';
+
+    const currentSubTopicType = localStorage.getItem('currentSubTopicType');
+
+    const currentSubTopic = currentSubTopicType === 'notes' ? 'Notes' : 'Term/Definitions';
+    if (currentSubTopic === 'Notes') {
+        content.forEach(note => {
+            const noteHolder = document.createElement('ul');
+            noteHolder.classList.add('note-holder');
+
+            const noteItem = document.createElement('li');
+            noteItem.classList.add('note');
+            noteItem.innerText = note;
+
+            noteHolder.appendChild(noteItem);
+            rightContent.appendChild(noteHolder);
+        });
+    } else if (currentSubTopic === "Term/Definitions") {
+        content.forEach(termdef => {
+            const termdefHolder = document.createElement('div');
+            termdefHolder.classList.add('termdef-holder');
+
+            const term = document.createElement('h4');
+            term.classList.add('term');
+            term.innerText = termdef.term;
+
+            const definitionHolder = document.createElement('ul')
+            definitionHolder.classList.add('definition-holder');
+
+            if (Array.isArray(termdef.definition)) {
+                termdef.definition.forEach(definition => {
+                    const definitionItem = document.createElement('li');
+                    definitionItem.classList.add('definition');
+                    definitionItem.innerHTML = `
+                        <span class="definition-bullet">\u2605</span>
+                        ${definition}
+                    `;
+                    definitionHolder.appendChild(definitionItem);
+                });
+            } else {
+                const definition = document.createElement('li');
+                definition.classList.add('definition');
+                definition.innerHTML = `
+                    <span class="definition-bullet">\u2605</span>
+                    ${termdef.definition}
+                `;
+
+                definitionHolder.appendChild(definition);
+            }
+
+            termdefHolder.appendChild(term);
+            termdefHolder.appendChild(definitionHolder);
+            rightContent.appendChild(termdefHolder);
+        });
+    };
+};
+
 fetchSubject();
+//navigateToCurrentTopic();
