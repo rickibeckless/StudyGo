@@ -1,5 +1,8 @@
 <!--
-    this is the home page and displays all the subjects
+    this is the home page and displays the top five (most classes) subjects
+    selecting subject will open dropdown with classes
+    selecting class will open dropdown with units
+    selecting unit will navigate to that units page
 -->
 
 <!doctype html>
@@ -7,29 +10,30 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"> -->
         <script src="./scripts/indexScript.js" defer></script>
         <title>StudyGo</title>
-      <link rel="stylesheet" crossorigin href="/assets/main-ZpCx_EnU.css">
+      <link rel="stylesheet" crossorigin href="/assets/main-WFfJlOKi.css">
+      <link rel="stylesheet" crossorigin href="/assets/mainStyles-SWEb1X1z.css">
     </head>
     <body>
         <header id="main-header">
             <h1 id="main-logo"><a href="/">StudyGo</a></h1>
             <nav id="main-navbar">
                 <ul>
-                    <li><a href="/subjects">Subjects</a></li>
+                    <li><a href="/subjects">All Subjects</a></li>
                     <li><a href="/classes">Classes</a></li>
                 </ul>
             </nav>
         </header>
 
-        <main id="main-body">
+        <main id="main-body" class="container">
             <section id="main-section">
                 <h2 id="main-section-title">Welcome to StudyGo</h2>
                 <p id="main-section-description">The best place to learn and study online.</p>
-                <a id="main-section-button" href="#">Get Started</a>
+                <a id="main-section-button" class="button" href="#">Get Started</a>
             </section>
-            <section>
+            <section id="subjects-section">
                 <h2>Subjects</h2>
                 <ul id="subject-list">
                     <li id="default-li">Nothing yet! <a href="#">Add some subjects</a> to get started!</li>

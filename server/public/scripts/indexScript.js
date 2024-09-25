@@ -48,6 +48,17 @@ function displaySubject(subject) {
     subList.appendChild(subHolder);
     subHolder.appendChild(classDropdown);
     defaultLi.style.display = 'none';
+
+    handleMainBtnClick();
+}
+
+function handleMainBtnClick() {
+    const mainBtn = document.getElementById('main-section-button');
+    const subjectSection = document.getElementById('subjects-section');
+
+    mainBtn.addEventListener('click', () => {
+        subjectSection.scrollIntoView({ behavior: 'smooth' });
+    });
 }
 
 function hideAllClassDropdowns() {
