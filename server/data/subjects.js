@@ -7,6 +7,8 @@
 // }
 // console.log(idList);
 
+// add description field to each subject object
+
 const subjectData = [
     {
         "id": "UUnAetwV17vvuShPNJCJB",

@@ -6,6 +6,9 @@
 // }
 // console.log(idList);
 
+// add more data to each class object
+// ex: teacher, location, time
+
 const classesData = [
     {
         "id": "HRnC-GqvCbK6yFA1A9f-S",

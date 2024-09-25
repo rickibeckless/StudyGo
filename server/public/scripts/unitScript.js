@@ -43,14 +43,14 @@ async function fetchUnit() {
     const unit = await res.json();
     document.title = `${unit.name} | StudyGo`;
     displayUnit(unit);
-    fetchTopics();
+    fetchTopics(unit);
 }
 
-async function fetchTopics() {
+async function fetchTopics(unit) {
     const res = await fetch(`/api/topics/${subjectId}/${classId}/${unitId}`);
     const topics = await res.json();
     displayTopics(topics);
-    displayIntroOutroTopics();
+    displayIntroOutroTopics(unit);
 }
 
 function displaySubjectName(subjectName) {
@@ -163,16 +163,23 @@ function toggleTopicDropdown(topic) {
     };
 };
 
-function displayIntroOutroTopics() {
+/*
+    each unit overview will display the units description, learning objectives,
+    unit outcome, prerequisites, and the unit topics
+*/
+
+function displayIntroOutroTopics(unit) {
     const introTopic = document.createElement('li');
     introTopic.classList.add('topic-item');
     introTopic.innerText = 'Overview';
     introTopic.id = `${unitId}-intro-topic`;
     introTopic.addEventListener('click', () => {
-        localStorage.setItem('currentTopic', `${unitId}-main-overview`);
+        localStorage.setItem('currentSubTopic-topicId', `${unitId}-main-overview`);
         localStorage.setItem('currentSubTopicType', 'main-overview');
-        localStorage.removeItem('currentSubTopic-topicId');
+        localStorage.setItem('currentTopic', 'Overview');
         localStorage.removeItem('currentSubTopic-id');
+        displayRightNavContent();
+        displayRightContent(unit);
     });
 
     const outroTopic = document.createElement('li');
@@ -180,10 +187,12 @@ function displayIntroOutroTopics() {
     outroTopic.innerText = 'Summary';
     outroTopic.id = `${unitId}-outro-topic`;
     outroTopic.addEventListener('click', () => {
-        localStorage.setItem('currentTopic', `${unitId}-main-summary`);
+        localStorage.setItem('currentSubTopic-topicId', `${unitId}-main-summary`);
         localStorage.setItem('currentSubTopicType', 'main-summary');
-        localStorage.removeItem('currentSubTopic-topicId');
+        localStorage.setItem('currentTopic', 'Summary');
         localStorage.removeItem('currentSubTopic-id');
+        displayRightNavContent();
+        displayRightContent(unit);
     });
 
     const topicList = document.getElementById('left-nav-topics-list');
@@ -201,7 +210,9 @@ function displayRightNavContent() {
     const currentSubTopicType = localStorage.getItem('currentSubTopicType');
     const currentSubTopicId = localStorage.getItem('currentSubTopic-topicId');
 
-    const currentSubTopic = currentSubTopicType === 'notes' ? 'Notes' : 'Term/Definitions';
+    const currentSubTopic = currentSubTopicType === 'notes' ? 'Notes' : currentSubTopicType === 'termdefs' ? 'Term/Definitions'  : '';
+    
+    const currentTopicOverSummary = currentSubTopicType === 'main-summary' ? 'Summary' : currentSubTopicType === 'main-overview' ? 'Overview' : '';
 
     if (currentSubTopic) {
         const currentTopicHolder = document.createElement('li');
@@ -229,6 +240,27 @@ function displayRightNavContent() {
         rightNavList.appendChild(currentTopicHolder);
         rightNavList.appendChild(rightNavDivider);
         rightNavList.appendChild(currentSubTopicHolder);
+        rightNavList.appendChild(nextSubTopicBtn);
+        rightNav.appendChild(rightNavList);
+        rightNav.appendChild(customRightNavBorder);
+    };
+
+    if (currentTopicOverSummary) {
+        const currentTopicHolder = document.createElement('li');
+        currentTopicHolder.classList.add('current-topic-holder');
+        currentTopicHolder.innerText = currentTopic;
+
+        const nextSubTopicBtn = document.createElement('button');
+        nextSubTopicBtn.id = 'next-sub-topic-btn';
+        nextSubTopicBtn.innerText = 'Next';
+
+        nextSubTopicBtn.addEventListener('click', () => {
+            goToNextSubTopic();
+        });
+
+        rightNav.innerHTML = '';
+        rightNavList.innerHTML = '';
+        rightNavList.appendChild(currentTopicHolder);
         rightNavList.appendChild(nextSubTopicBtn);
         rightNav.appendChild(rightNavList);
         rightNav.appendChild(customRightNavBorder);
@@ -272,7 +304,7 @@ function displayRightContent(content) {
     const currentSubTopicType = localStorage.getItem('currentSubTopicType');
 
     const currentSubTopic = currentSubTopicType === 'notes' ? 'Notes' : 'Term/Definitions';
-    if (currentSubTopic === 'Notes') {
+    if (currentSubTopicType === 'notes') {
         content.forEach(note => {
             const noteHolder = document.createElement('ul');
             noteHolder.classList.add('note-holder');
@@ -284,7 +316,7 @@ function displayRightContent(content) {
             noteHolder.appendChild(noteItem);
             rightContent.appendChild(noteHolder);
         });
-    } else if (currentSubTopic === "Term/Definitions") {
+    } else if (currentSubTopicType === "termdefs") {
         content.forEach(termdef => {
             const termdefHolder = document.createElement('div');
             termdefHolder.classList.add('termdef-holder');
@@ -321,6 +353,61 @@ function displayRightContent(content) {
             termdefHolder.appendChild(definitionHolder);
             rightContent.appendChild(termdefHolder);
         });
+    } else if (currentSubTopicType === 'main-overview') {
+        const unitOverview = document.createElement('dl');
+        unitOverview.classList.add('unit-overview');
+
+        const unitDescriptionTitle = document.createElement('dt');
+        unitDescriptionTitle.classList.add('unit-description-title');
+        unitDescriptionTitle.innerText = 'Description:';
+
+        const unitDescription = document.createElement('dd');
+        unitDescription.classList.add('unit-description');
+        unitDescription.innerText = content.description;
+
+        const prerequisitesTitle = document.createElement('dt');
+        prerequisitesTitle.classList.add('prerequisites-title');
+        prerequisitesTitle.innerText = 'Prerequisites:';
+
+        const prerequisites = document.createElement('dd');
+        prerequisites.classList.add('prerequisites');
+        prerequisites.innerText = content.prerequisites;
+
+        const learningObjectivesTitle = document.createElement('dt');
+        learningObjectivesTitle.classList.add('learning-objectives-title');
+        learningObjectivesTitle.innerText = 'Learning Objectives:';
+
+        const learningObjectives = document.createElement('ul');
+        learningObjectives.classList.add('learning-objectives');
+        content.learningObjectives.forEach(objective => {
+            const objectiveItem = document.createElement('li');
+            objectiveItem.classList.add('objective-item');
+            objectiveItem.innerText = objective;
+            learningObjectives.appendChild(objectiveItem);
+        });
+
+        const unitOutcomeTitle = document.createElement('dt');
+        unitOutcomeTitle.classList.add('unit-outcome-title');
+        unitOutcomeTitle.innerText = 'Outcome:';
+
+        const unitOutcome = document.createElement('dd');
+        unitOutcome.classList.add('unit-outcome');
+        unitOutcome.innerText = content.unitOutcome;
+
+        unitOverview.appendChild(unitDescriptionTitle);
+        unitOverview.appendChild(unitDescription);
+        unitOverview.appendChild(prerequisitesTitle);
+        unitOverview.appendChild(prerequisites);
+        unitOverview.appendChild(learningObjectivesTitle);
+        unitOverview.appendChild(learningObjectives);
+        unitOverview.appendChild(unitOutcomeTitle);
+        unitOverview.appendChild(unitOutcome);
+        rightContent.appendChild(unitOverview);
+    } else if (currentSubTopicType === 'main-summary') {
+        // want to have total number of notes and termdefs
+        // all topic names
+        // later on (when starring is set up) total number of starred notes and termdefs
+
     };
 };
 

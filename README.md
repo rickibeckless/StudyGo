@@ -14,7 +14,7 @@ The following **required** functionality is completed:
 - [X] **The web app uses only HTML, CSS, and JavaScript without a frontend framework**
 - [X] **The web app displays a title**
 - [ ] **The web app displays at least five list items, each with at least three attributes (such as title, text, and image url)**
-- [ ] **The user can click on each item in the list to see a detailed view of it, including all database fields**
+- [X] **The user can click on each item in the list to see a detailed view of it, including all database fields**
   - [ ] *Note: When showing this feature in the video walkthrough, please show the unique URL for each detailed view. We will not be able to give points if we cannot see the implementation* 
 - [X] **The web app serves an appropriate 404 page when no matching route is defined**
 - [X] **The web app is appropriately styled using Picocss**
