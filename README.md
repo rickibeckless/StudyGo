@@ -27,9 +27,9 @@ The following **optional** features are implemented:
 
 Here's a walkthrough of implemented required features:
 
-![StudyGo](https://i.ibb.co/C9JGnX5/Code-Path-Study-Go-p1-Walkthrough.gif)
+![StudyGo](https://i.ibb.co/d2vY27R/Code-Path-Study-Go-p1-Walkthrough.gif)
 
-GIF also found at [StudyGo](https://i.ibb.co/C9JGnX5/Code-Path-Study-Go-p1-Walkthrough.gif) on ImgBB
+GIF also found at [StudyGo](https://i.ibb.co/d2vY27R/Code-Path-Study-Go-p1-Walkthrough.gif) on ImgBB
 
 GIF created with [ScreenToGif](https://www.screentogif.com/)
 

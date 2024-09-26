@@ -70,6 +70,7 @@ function displaySubjectName(subjectName) {
 
 function displayClassName(className) {
     const classLink = document.getElementById('class-link');
+    classLink.href = `/${subjectId}/${classId}`;
     classLink.innerText = className;
 }
 

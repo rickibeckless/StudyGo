@@ -6,6 +6,10 @@ import classesRoutes from './routes/classesRoutes.js';
 import subjectsRoutes from './routes/subjectsRoutes.js';
 import unitsRoutes from './routes/unitsRoutes.js';
 import topicsRoutes from './routes/topicsRoutes.js';
+import subjectData from './data/subjects.js';
+import classData from './data/classes.js';
+import unitData from './data/units.js';
+import topicData from './data/topics.js';
 
 const app = express();
 const router = express.Router();
@@ -31,15 +35,30 @@ app.get('/subjects', (req, res) => {
 });
 
 app.get('/:subjectId/:classId/:unitId', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/units.html'));
+    const { subjectId, classId, unitId } = req.params;
+    if (isValidSubject(subjectId) && isValidClass(subjectId, classId) && isValidUnit(subjectId, classId, unitId)) {
+        res.sendFile(path.join(__dirname, '../client/units.html'));
+    } else {
+        res.status(404).sendFile(path.join(__dirname, '../client/404.html'));
+    }
 });
 
 app.get('/:subjectId/:classId', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/classes.html'));
+    const { subjectId, classId } = req.params;
+    if (isValidSubject(subjectId) && isValidClass(subjectId, classId)) {
+        res.sendFile(path.join(__dirname, '../client/classes.html'));
+    } else {
+        res.status(404).sendFile(path.join(__dirname, '../client/404.html'));
+    }
 });
 
 app.get('/:subjectId', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/classes.html'));
+    const { subjectId } = req.params;
+    if (isValidSubject(subjectId)) {
+        res.sendFile(path.join(__dirname, '../client/classes.html'));
+    } else {
+        res.status(404).sendFile(path.join(__dirname, '../client/404.html'));
+    }
 });
 
 app.get('/classes', (req, res) => {
@@ -52,7 +71,7 @@ app.get('/exams', (req, res) => {
 
 app.get('/units', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/units.html'));
-})
+});
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/index.html'));
@@ -62,9 +81,32 @@ app.use((req, res, next) => {
     res.status(404).sendFile(path.join(__dirname, '../client/404.html'));
 });
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/404.html'));
-});
+function isValidSubject(subjectId) {
+    const validSubject = subjectData.find(subject => subject.id === subjectId);
+    if (!validSubject) {
+        return false;
+    };
+
+    return true;
+}
+
+function isValidClass(subjectId, classId) {
+    const validClass = classData.find(cls => cls.id === classId && cls.subjectId === subjectId);
+    if (!validClass) {
+        return false;
+    };
+
+    return true;
+}
+
+function isValidUnit(subjectId, classId, unitId) {
+    const validUnit = unitData.find(unit => unit.id === unitId && unit.classId === classId && unit.subjectId === subjectId);
+    if (!validUnit) {
+        return false;
+    };
+
+    return true;
+}
 
 app.listen(PORT, () => {
     console.log(`Server running on 'http://localhost:${PORT}'`);
