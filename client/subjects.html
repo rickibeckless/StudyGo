@@ -12,6 +12,8 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/css/mainStyles.css">
+        <link rel="stylesheet" href="/css/subjectStyles.css">
+        <script src="/scripts/subjectScript.js" defer></script>
         <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"> -->
         <title>StudyGo</title>
     </head>
@@ -20,15 +22,43 @@
             <h1 id="main-logo"><a href="/">StudyGo</a></h1>
             <nav id="main-navbar">
                 <ul>
-                    <li><a href="/subjects">Subjects</a></li>
                     <li><a href="/classes">Classes</a></li>
                 </ul>
             </nav>
         </header>
 
         <main id="main-body" class="container">
-            <section>
-                <h1>HEY</h1>
+            <aside id="subjects-filter-holder">
+                <!--
+                    going to be on the left hand side of the page
+                    will contain the search bar
+                    will have filters for subjects
+                        - alphabetical (default)
+                        - most classes to least classes
+                        - least classes to most classes
+                        - date added
+                        - date updated
+                -->
+            </aside>
+            <section id="subjects-section">
+                <!--
+                    going to be on the right hand side of the page
+                    will contain all subjects in card style
+                    each card will have:
+                        - subject image
+                        - subject name
+                        - number of classes
+                    selecting a subject will open a dropdown with classes
+                        - top five classes
+                        - view all classes
+                    selecting view all classes will open to that subjects page
+                    selecting a class will open dropdown with all units
+                    selecting a unit will open that unit page
+                -->
+                <h2>All Subjects</h2>
+                <ul id="subject-list">
+                    <li id="default-li">Nothing yet! <a href="#">Add some subjects</a> to get started!</li>
+                </ul>
             </section>
         </main>
         

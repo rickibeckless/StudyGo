@@ -26,6 +26,10 @@ app.use('/api/subjects', subjectsRoutes);
 app.use('/api/units', unitsRoutes);
 app.use('/api/topics', topicsRoutes);
 
+app.get('/subjects', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/subjects.html'));
+});
+
 app.get('/:subjectId/:classId/:unitId', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/units.html'));
 });
@@ -40,10 +44,6 @@ app.get('/:subjectId', (req, res) => {
 
 app.get('/classes', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/classes.html'));
-});
-
-app.get('/subjects', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/subjects.html'));
 });
 
 app.get('/exams', (req, res) => {

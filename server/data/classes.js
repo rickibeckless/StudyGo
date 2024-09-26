@@ -19,7 +19,9 @@ const classesData = [
             'cHaTq8MG3-QT_57as-RLA',
             '5r7g0JWZYX2mcNYDygVRT',
             'SlSK2eupc3KdqbHbGoxH3',
-        ]
+        ],
+        "date_created": "2022-03-15",
+        "date_updated": "2023-08-05"
     },
     {
         "id": "dtn_1xWqLr9iQEeRalIRO",
@@ -28,7 +30,9 @@ const classesData = [
         "subjectId": "UUnAetwV17vvuShPNJCJB",
         "unitIds": [
             
-        ]
+        ],
+        "date_created": "2023-10-20",
+        "date_updated": "2024-09-25"
     },
     {
         "id": "ssl-NirCJaiOWygAIotUc",
@@ -37,7 +41,9 @@ const classesData = [
         "subjectId": "UUnAetwV17vvuShPNJCJB",
         "unitIds": [
             
-        ]
+        ],
+        "date_created": "2023-10-20",
+        "date_updated": "2024-01-30"
     },
     {
         "id": "LKMmCSvKr3Ao5sHZyzGF7",
@@ -46,7 +52,9 @@ const classesData = [
         "subjectId": "UUnAetwV17vvuShPNJCJB",
         "unitIds": [
             "DLHmzUSfjCkQNL4VbhNpM",
-        ]
+        ],
+        "date_created": "2021-11-29",
+        "date_updated": "2024-09-25"
     },
     {
         "id": "ODfd_0AwznO1kYaUaJ64d",
@@ -55,7 +63,9 @@ const classesData = [
         "subjectId": "HvpCcQk3uBH4N-G0Z4W7Q",
         "unitIds": [
 
-        ]
+        ],
+        "date_created": "2020-09-20",
+        "date_updated": "2020-09-25"
     },
     {
         "id": "q5JirzJIiAHMRCpPFyirM",
@@ -64,7 +74,9 @@ const classesData = [
         "subjectId": "HvpCcQk3uBH4N-G0Z4W7Q",
         "unitIds": [
             
-        ]
+        ],
+        "date_created": "2020-09-20",
+        "date_updated": "2021-09-25"
     },
     {
         "id": "n4fL1RRwNN31i4DUj1sro",
@@ -73,7 +85,9 @@ const classesData = [
         "subjectId": "HvpCcQk3uBH4N-G0Z4W7Q",
         "unitIds": [
             
-        ]
+        ],
+        "date_created": "2020-09-20",
+        "date_updated": "2021-02-11"
     },
     {
         "id": "RyEoI9HQrclM9gLJhDx89",
@@ -82,7 +96,9 @@ const classesData = [
         "subjectId": "HvpCcQk3uBH4N-G0Z4W7Q",
         "unitIds": [
             "eZzRhprJXjMZuXTcnqFi9",
-        ]
+        ],
+        "date_created": "2021-09-20",
+        "date_updated": "2024-02-02"
     },
     {
         "id": "zo3vl14a0aMNpM_bYjCcA",
@@ -91,7 +107,9 @@ const classesData = [
         "subjectId": "GheaHQNuqrOcM6S_uc5Ox",
         "unitIds": [
             
-        ]
+        ],
+        "date_created": "2024-09-20",
+        "date_updated": "2024-09-25"
     },
     {
         "id": "YWi0Dir0Y-QKyTzPcdp62",
@@ -100,7 +118,9 @@ const classesData = [
         "subjectId": "GheaHQNuqrOcM6S_uc5Ox",
         "unitIds": [
 
-        ]
+        ],
+        "date_created": "2024-09-20",
+        "date_updated": "2024-09-25"
     },
     {
         "id": "MP48NKU0UEeDSpFHdooT6",
@@ -109,7 +129,9 @@ const classesData = [
         "subjectId": "GheaHQNuqrOcM6S_uc5Ox",
         "unitIds": [
             
-        ]
+        ],
+        "date_created": "2024-09-20",
+        "date_updated": "2024-09-25"
     },
     {
         "id": "ZTChGslRvPmjy5IqZ_KON",
@@ -118,7 +140,9 @@ const classesData = [
         "subjectId": "GheaHQNuqrOcM6S_uc5Ox",
         "unitIds": [
             "UX8Vq1h2m6FNc5wq3cBQv",
-        ]
+        ],
+        "date_created": "2024-09-20",
+        "date_updated": "2024-09-25"
     },
     {
         "id": "y6sMJuD5Q6A_X29iGjMnE",
@@ -127,7 +151,9 @@ const classesData = [
         "subjectId": "QX8Jb7XkFgLi4ZUjklY8T",
         "unitIds": [
             "uHgGjxFzc8dMWo7KPq9yJ",
-        ]
+        ],
+        "date_created": "2022-09-20",
+        "date_updated": "2022-09-25"
     },
     {
         "id": "v2bEpFR5UCQks_nIDwnNc",
@@ -136,7 +162,9 @@ const classesData = [
         "subjectId": "d4l2O4JqI7QiYwxlQ1oLE",
         "unitIds": [
             "rwPxNgNFSRb9YOwXfh9pS",
-        ]
+        ],
+        "date_created": "2021-11-29",
+        "date_updated": "2022-09-25"
     }
 ];
 

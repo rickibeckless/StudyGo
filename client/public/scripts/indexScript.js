@@ -10,6 +10,9 @@ async function fetchSubjects() {
 async function fetchClasses(subjectId) {
     const res = await fetch(`/api/classes/${subjectId}`);
     const classes = await res.json();
+
+    classes.sort((a, b) => b.unitIds.length - a.unitIds.length);
+    classes.splice(5);
     classes.forEach(classes => displayClass(classes));
 }
 
@@ -52,8 +55,8 @@ function displaySubject(subject) {
 
         lastOpenedClassDropdown = classDropdown;
 
-        subDescription.classList.remove('hidden-description');
-        viewAllClassesLink.classList.remove('hidden-class-link');
+        subDescription.classList.toggle('hidden-description');
+        viewAllClassesLink.classList.toggle('hidden-class-link');
     });
 
     const classDropdown = document.createElement('ul');
@@ -80,6 +83,7 @@ function handleMainBtnClick() {
     });
 }
 
+// currently not in use
 function hideAllClassDropdowns() {
     const allClassDropdowns = document.querySelectorAll('.class-dropdown');
     allClassDropdowns.forEach(classDropdown => {
@@ -108,7 +112,7 @@ function displayClass(classes) {
         
             const unitDropdown = document.getElementById(`${classes.id}-unit-dropdown`);
             if (unitDropdown) {
-                unitDropdown.classList.remove('hidden-dropdown');
+                unitDropdown.classList.toggle('hidden-dropdown');
             }
         });
 
@@ -159,10 +163,19 @@ function displayUnit(unit, classId) {
     unitDropdown.appendChild(unitItemHolder);
 }
 
+// currently not in use
 function hideAllUnitDropdowns() {
     const allUnitDropdowns = document.querySelectorAll('.unit-dropdown');
+    const allSubDescriptions = document.querySelectorAll('.subject-description');
+    const allViewAllClassesLinks = document.querySelectorAll('.view-all-classes-link');
     allUnitDropdowns.forEach(unitDropdown => {
         unitDropdown.classList.add('hidden-dropdown');
+    });
+    allSubDescriptions.forEach(subDescription => {
+        subDescription.classList.add('hidden-description');
+    });
+    allViewAllClassesLinks.forEach(viewAllClassesLink => {
+        viewAllClassesLink.classList.add('hidden-class-link');
     });
 }
 

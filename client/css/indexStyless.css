@@ -1,3 +1,10 @@
+.hidden-dropdown,
+.hidden-class,
+.hidden-class-link,
+.hidden-description {
+    display: none;
+}
+
 /* Main Body Styles */
 #main-body {
     display: flex;
@@ -81,10 +88,6 @@ h2 {
     background-color: #e6f7ff;
 }
 
-.hidden-class-link {
-    display: none;
-}
-
 .view-all-classes-link {
     font-size: .9rem;
     color: #0073e6;
@@ -96,10 +99,6 @@ h2 {
 .view-all-classes-link:hover {
     color: #005bb5;
     font-weight: 500;
-}
-
-.hidden-description {
-    display: none;
 }
 
 .subject-description {
