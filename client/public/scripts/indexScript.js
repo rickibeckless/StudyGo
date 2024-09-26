@@ -17,6 +17,8 @@ async function fetchClasses(subjectId) {
 }
 
 let lastOpenedClassDropdown = null;
+let lastOpenedDescription = null;
+let lastOpenedAllClassesLink = null;
 
 function displaySubject(subject) {
     const defaultLi = document.getElementById('default-li');
@@ -46,6 +48,12 @@ function displaySubject(subject) {
         if (lastOpenedClassDropdown && lastOpenedClassDropdown !== classDropdown) {
             lastOpenedClassDropdown.classList.add('hidden-dropdown');
         }
+        if (lastOpenedDescription && lastOpenedDescription !== subDescription) {
+            lastOpenedDescription.classList.add('hidden-description');
+        }
+        if (lastOpenedAllClassesLink && lastOpenedAllClassesLink !== viewAllClassesLink) {
+            lastOpenedAllClassesLink.classList.add('hidden-class-link');
+        }
 
         classDropdown.classList.toggle('hidden-dropdown');
 
@@ -54,6 +62,8 @@ function displaySubject(subject) {
         }
 
         lastOpenedClassDropdown = classDropdown;
+        lastOpenedDescription = subDescription;
+        lastOpenedAllClassesLink = viewAllClassesLink;
 
         subDescription.classList.toggle('hidden-description');
         viewAllClassesLink.classList.toggle('hidden-class-link');
@@ -80,14 +90,6 @@ function handleMainBtnClick() {
     // used mainBtn to scroll to the top of the subjects section because of sticky header
     mainBtn.addEventListener('click', () => {
         mainBtn.scrollIntoView({ behavior: 'smooth' });
-    });
-}
-
-// currently not in use
-function hideAllClassDropdowns() {
-    const allClassDropdowns = document.querySelectorAll('.class-dropdown');
-    allClassDropdowns.forEach(classDropdown => {
-        classDropdown.classList.add('hidden-dropdown'); 
     });
 }
 
@@ -161,22 +163,6 @@ function displayUnit(unit, classId) {
 
     unitItemHolder.appendChild(unitItem);
     unitDropdown.appendChild(unitItemHolder);
-}
-
-// currently not in use
-function hideAllUnitDropdowns() {
-    const allUnitDropdowns = document.querySelectorAll('.unit-dropdown');
-    const allSubDescriptions = document.querySelectorAll('.subject-description');
-    const allViewAllClassesLinks = document.querySelectorAll('.view-all-classes-link');
-    allUnitDropdowns.forEach(unitDropdown => {
-        unitDropdown.classList.add('hidden-dropdown');
-    });
-    allSubDescriptions.forEach(subDescription => {
-        subDescription.classList.add('hidden-description');
-    });
-    allViewAllClassesLinks.forEach(viewAllClassesLink => {
-        viewAllClassesLink.classList.add('hidden-class-link');
-    });
 }
 
 function navigateToClass(subjectId, classId) {

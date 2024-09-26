@@ -1,10 +1,10 @@
 // nanoid purpose: generate unique id for each new subject object
-import { nanoid } from 'nanoid';
-let idList = [];
-for (let i = 0; i < 15; i++) {
-    idList.push(nanoid());
-}
-console.log(idList);
+// import { nanoid } from 'nanoid';
+// let idList = [];
+// for (let i = 0; i < 15; i++) {
+//     idList.push(nanoid());
+// }
+// console.log(idList);
 
 // add description field to each subject object
 

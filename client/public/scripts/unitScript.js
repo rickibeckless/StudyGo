@@ -24,6 +24,15 @@ const currentSubTopicFullId = localStorage.getItem('currentSubTopic-id');
 //     }
 // }
 
+function openOverview(unit) {
+    localStorage.setItem('currentSubTopic-topicId', `${unitId}-main-overview`);
+    localStorage.setItem('currentSubTopicType', 'main-overview');
+    localStorage.setItem('currentTopic', 'Overview');
+    localStorage.removeItem('currentSubTopic-id');
+    displayRightNavContent();
+    displayRightContent(unit);
+}
+
 async function fetchSubject() {
     const res = await fetch(`/api/subjects/${subjectId}`);
     const subject = await res.json();
@@ -44,6 +53,7 @@ async function fetchUnit() {
     document.title = `${unit.name} | StudyGo`;
     displayUnit(unit);
     fetchTopics(unit);
+    openOverview(unit);
 }
 
 async function fetchTopics(unit) {
