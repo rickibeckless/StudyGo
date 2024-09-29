@@ -1,39 +1,72 @@
 <!--
-    This file is the class page. It will display a specific class.
-    There will be a search bar to search for units.
-    List of units will be displayed.
-        NTS: in the units database, there will be a column for index number.
-        This will be used to order the units.
+    This file is the classes page. It will either show all classes, or all 
+        classes for a specific subject.
+    There will be a search bar to search for classes.
+    List of classes will be displayed.
+    Selecting a class will open to that classes details page.
     Selecting a unit will open to that units page with the overview tab selected.
 -->
 
 <!doctype html>
 <html lang="en">
+
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"> -->
         <link rel="stylesheet" href="/css/mainStyles.css">
+        <link rel="stylesheet" href="/css/subjectStyles.css">
+        <link rel="stylesheet" href="/css/classStyles.css">
         <script src="/scripts/classScript.js" defer></script>
         <title>StudyGo</title>
     </head>
+
     <body>
         <header id="main-header">
             <h1 id="main-logo"><a href="/">StudyGo</a></h1>
             <nav id="main-navbar">
                 <ul>
-                    <li><a href="/subjects">Subject</a></li>
-                    <li><a href="/classes">Class</a></li>
+                    <li><a href="/subjects">All Subjects</a></li>
+                    <li><a href="/classes">All Classes</a></li>
                 </ul>
             </nav>
         </header>
 
         <main id="main-body" class="container">
-            <section id="classes-main-section">
+            <aside id="subjects-filter-holder">
+                <form id="subjects-search-form">
+                    <label for="subjects-search">Search Classes</label>
+                    <input type="text" id="subjects-search" name="subjects-search" placeholder="Search for a class...">
+                    <button type="button" id="subject-search-btn">Search</button>
+                </form>
 
-            </section>
+                <form id="subjects-filter-form">
+                    <label for="subjects-filter">Filter Classes</label>
+                    <select id="subjects-filter" name="subjects-filter">
+                        <option value="alphabetical">Alphabetical</option>
+                        <option value="by-units">Most Units</option>
+                        <option value="date-added">Date Added</option>
+                        <option value="date-updated">Date Updated</option>
+                    </select>
+
+                    <label for="subjects-filter-order">Order</label>
+                    <select id="subjects-filter-order" name="subjects-filter-order">
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
+                    </select>
+
+                    <div class="checkbox-container">
+                        <label for="subjects-filter-show-empty" class="checkbox-label">Show Classes With No Units</label>
+                        <input type="checkbox" id="subjects-filter-show-empty" name="subjects-filter-show-empty" value="true">
+                        <label for="subjects-filter-show-empty" class="custom-checkbox"></label>
+                    </div>
+
+                    <button type="button" id="subject-filter-btn">Filter</button>
+                </form>
+            </aside>
+
+            <section id="subjects-section"></section>
         </main>
-        
+
         <footer id="main-footer">
             <nav id="footer-navbar">
                 <ul>
@@ -45,8 +78,11 @@
                 </ul>
             </nav>
             <p id="footer-cr-statement">
-                Copyright &copy; 2024 <a id="footer-cr-link" href="https://github.com/rickibeckless" target="_blank" rel="noopener nofollow noreferrer" title="Ricki Beckless GitHub">Ricki Beckless</a>. All rights reserved.
+                Copyright &copy; 2024 <a id="footer-cr-link" href="https://github.com/rickibeckless" target="_blank"
+                    rel="noopener nofollow noreferrer" title="Ricki Beckless GitHub">Ricki Beckless</a>. All rights
+                reserved.
             </p>
         </footer>
     </body>
+
 </html>

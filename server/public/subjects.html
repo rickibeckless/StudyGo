@@ -14,10 +14,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <script src="/scripts/subjectScript.js" defer></script>
         <script src="https://kit.fontawesome.com/6fdb255b28.js" crossorigin="anonymous"></script>
-        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"> -->
         <title>StudyGo</title>
-      <link rel="stylesheet" crossorigin href="/assets/subjects-BXveDlmS.css">
-      <link rel="stylesheet" crossorigin href="/assets/mainStyles-CAhs8peA.css">
+      <link rel="stylesheet" crossorigin href="/assets/mainStyles-DfAFs1OT.css">
+      <link rel="stylesheet" crossorigin href="/assets/subjectStyles-DWcbhVH2.css">
     </head>
 
     <body>
@@ -25,7 +24,7 @@
             <h1 id="main-logo"><a href="/">StudyGo</a></h1>
             <nav id="main-navbar">
                 <ul>
-                    <li><a href="/classes">Classes</a></li>
+                    <li><a href="/classes">All Classes</a></li>
                 </ul>
             </nav>
         </header>
@@ -43,8 +42,7 @@
                     <label for="subjects-filter">Filter Subjects</label>
                     <select id="subjects-filter" name="subjects-filter">
                         <option value="alphabetical">Alphabetical</option>
-                        <option value="most-classes">Most Classes</option>
-                        <option value="least-classes">Least Classes</option>
+                        <option value="by-classes">Most Classes</option>
                         <option value="date-added">Date Added</option>
                         <option value="date-updated">Date Updated</option>
                     </select>
@@ -112,7 +110,7 @@
             </p>
         </footer>
 
-        <script>
+        <!-- <script>
             const hamburger = document.querySelector('.hamburger');
             const headerLinks = document.querySelector('.header-links');
 
@@ -131,11 +129,7 @@
                     closeMenu();
                 }
             });
-
-            headerLinks.addEventListener('click', (e) => {
-                e.stopPropagation();
-            });
-        </script>
+        </script> -->
     </body>
 
 </html>

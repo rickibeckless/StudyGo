@@ -24,7 +24,7 @@ form {
 label {
     font-size: 1.1rem;
     font-weight: 500;
-    color: #333;
+    color: #333333;
     display: block;
     margin-bottom: 0.5rem;
 }
@@ -33,7 +33,7 @@ input[type="text"],
 select {
     width: 100%;
     padding: 0.8rem;
-    border: 1px solid #ccc;
+    border: 1px solid #cccccc;
     border-radius: 0.5rem;
     font-size: 1rem;
     margin-bottom: 1rem;
@@ -42,8 +42,6 @@ select {
 
 button {
     display: inline-block;
-    width: 100%;
-    padding: 0.8rem;
     background-color: #0073e6;
     color: white;
     border: none;
@@ -53,8 +51,18 @@ button {
     transition: background-color 0.3s ease-in-out;
 }
 
+form button {
+    width: 100%;
+    padding: 0.8rem;
+}
+
 button:hover {
     background-color: #005bb5;
+}
+
+.add-class-button {
+    width: 2rem;
+    height: 1.5rem;
 }
 
 .checkbox-container {
@@ -82,6 +90,7 @@ input[type="checkbox"] {
     margin-right: 0.5rem;
     transition: background-color 0.2s ease, border-color 0.2s ease;
     position: relative;
+    cursor: pointer;
 }
 
 .custom-checkbox:after {
@@ -99,7 +108,7 @@ input[type="checkbox"] {
 
 .checkbox-label {
     font-size: 1rem;
-    color: #333;
+    color: #333333;
     cursor: pointer;
     -webkit-user-select: none;
     user-select: none;
@@ -137,7 +146,7 @@ input[type="checkbox"]:focus + .custom-checkbox {
 #subjects-section h2 {
     font-size: 1.5rem;
     margin: 2rem 0;
-    color: #333;
+    color: #333333;
     text-align: center;
 }
 
@@ -150,12 +159,18 @@ input[type="checkbox"]:focus + .custom-checkbox {
 }
 
 .subject-holder {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+
     background-color: #ffffff;
     border-radius: 0.5rem;
     box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
     overflow: scroll;
     cursor: pointer;
+
+    height: 50vh;
 }
 
 .subject {
@@ -163,15 +178,25 @@ input[type="checkbox"]:focus + .custom-checkbox {
     font-weight: bold;
     color: #007BFF;
     text-decoration: none;
-    padding: 1.5rem;
+    padding: 1.5rem 1.5rem 0;
     display: block;
     cursor: pointer;
+
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: #ffffff;
 }
 
 .subject-description {
     font-size: 1rem;
-    color: #666;
-    padding: 0 1.5rem 1.5rem 1.5rem;
+    color: #666666;
+    padding: 1.5rem;
+
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .view-all-classes-link {
@@ -190,10 +215,19 @@ input[type="checkbox"]:focus + .custom-checkbox {
     color: #004BFF;
 }
 
+.count-and-button-holder {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2rem 0 .5rem;
+}
+
 .subject-class-count {
     font-size: 1rem;
     font-weight: 500;
-    text-align: right;
+    /* text-align: right; */
 }
 
 .subject-class-count-number {
@@ -240,9 +274,11 @@ li.unit-item-holder {
 
 #default-li {
     text-align: center;
-    color: #999;
+    color: #999999;
     font-style: italic;
 }
+
+/* HAMBURGER STYLES */
 
 .hamburger {
     display: none;

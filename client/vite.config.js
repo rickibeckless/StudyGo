@@ -10,6 +10,7 @@ export default defineConfig({
                 main: resolve(__dirname, 'index.html'),
                 subjects: resolve(__dirname, 'subjects.html'),
                 classes: resolve(__dirname, 'classes.html'),
+                class: resolve(__dirname, 'classDetails.html'),
                 units: resolve(__dirname, 'units.html'),
                 '404': resolve(__dirname, '404.html'),
             },

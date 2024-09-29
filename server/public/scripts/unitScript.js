@@ -37,21 +37,27 @@ async function fetchSubject() {
     const res = await fetch(`/api/subjects/${subjectId}`);
     const subject = await res.json();
     fetchClasses();
-    displaySubjectName(subject.name);
+    displaySubjectName(subject[0].name);
 }
 
 async function fetchClasses() {
     const res = await fetch(`/api/classes/${subjectId}`);
     const classes = await res.json();
     fetchUnit();
-    displayClassName(classes.find(cls => cls.id === classId).name);
+
+    const classFound = classes.find(cls => cls.unique_string_id === classId);
+    if (classFound) {
+        displayClassName(classFound.name);
+    } else {
+        console.error("Class not found for ID:", classId);
+    }
 }
 
 async function fetchUnit() {
     const res = await fetch(`/api/units/${subjectId}/${classId}/${unitId}`);
     const unit = await res.json();
-    document.title = `${unit.name} | StudyGo`;
-    displayUnit(unit);
+    document.title = `${unit[0].name} | StudyGo`;
+    displayUnit(unit[0]);
     fetchTopics(unit);
     openOverview(unit);
 }
@@ -65,11 +71,14 @@ async function fetchTopics(unit) {
 
 function displaySubjectName(subjectName) {
     const subjectLink = document.getElementById('subject-link');
+    // will go to classes page for that subject
+    subjectLink.href = `/${subjectId}`
     subjectLink.innerText = subjectName;
 }
 
 function displayClassName(className) {
     const classLink = document.getElementById('class-link');
+    // will go to classes page for that unit
     classLink.href = `/${subjectId}/${classId}`;
     classLink.innerText = className;
 }
@@ -86,7 +95,7 @@ function displayTopics(topics) {
     topics.forEach(topic => {
         const topicItemHolder = document.createElement('div');
         topicItemHolder.classList.add('topic-item-holder');
-        topicItemHolder.id = `${topic.id}-topic-item-holder`;
+        topicItemHolder.id = `${topic.unique_string_id}-topic-item-holder`;
 
         const topicItem = document.createElement('li');
         topicItem.classList.add('topic-item');
@@ -97,11 +106,11 @@ function displayTopics(topics) {
 
         const topicDropdown = document.createElement('ul');
         topicDropdown.classList.add('topic-dropdown', 'hidden-dropdown');
-        topicDropdown.id = `${topic.id}-topic-dropdown`;
+        topicDropdown.id = `${topic.unique_string_id}-topic-dropdown`;
         topicItemHolder.appendChild(topicDropdown);
 
         const topicNotes = topic.notes;
-        const topicTermdefs = topic.termdefs;
+        const topicTermdefs = topic.terms_defs;
 
         //console.log("topicNotes: ", topicNotes);
         //console.log("topicTermdefs: ", topicTermdefs);
@@ -128,22 +137,28 @@ function displayTopics(topics) {
         // });
 
         const notesHolder = document.createElement('li');
-        notesHolder.id = `${topic.id}-notes`;
+        notesHolder.id = `${topic.unique_string_id}-notes`;
         notesHolder.classList.add('sub-topic-item');
         notesHolder.innerText = 'Notes';
         topicDropdown.appendChild(notesHolder);
 
         const termdefsHolder = document.createElement('li');
-        termdefsHolder.id = `${topic.id}-termdefs`;
+        termdefsHolder.id = `${topic.unique_string_id}-termdefs`;
         termdefsHolder.classList.add('sub-topic-item');
         termdefsHolder.innerText = 'Term/Definitions';
         topicDropdown.appendChild(termdefsHolder);
 
+        const lessonsHolder = document.createElement('li');
+        lessonsHolder.id = `${topic.unique_string_id}-lessons`;
+        lessonsHolder.classList.add('sub-topic-item');
+        lessonsHolder.innerText = 'Lesson';
+        topicDropdown.appendChild(lessonsHolder);
+
         notesHolder.addEventListener('click', () => {
             localStorage.setItem('currentTopic', topic.name);
             localStorage.setItem('currentSubTopicType', 'notes');
-            localStorage.setItem('currentSubTopic-topicId', topic.id);
-            localStorage.setItem('currentSubTopic-id', `${topic.id}-notes`);
+            localStorage.setItem('currentSubTopic-topicId', topic.unique_string_id);
+            localStorage.setItem('currentSubTopic-id', `${topic.unique_string_id}-notes`);
             //selectedIndex.innerText = subTopics[0].length;
             displayRightNavContent();
             displayRightContent(topicNotes);
@@ -152,11 +167,20 @@ function displayTopics(topics) {
         termdefsHolder.addEventListener('click', () => {
             localStorage.setItem('currentTopic', topic.name);
             localStorage.setItem('currentSubTopicType', 'termdefs');
-            localStorage.setItem('currentSubTopic-topicId', topic.id);
-            localStorage.setItem('currentSubTopic-id', `${topic.id}-termdefs`);
+            localStorage.setItem('currentSubTopic-topicId', topic.unique_string_id);
+            localStorage.setItem('currentSubTopic-id', `${topic.unique_string_id}-termdefs`);
             //selectedIndex.innerText = subTopics[1].length;
             displayRightNavContent();
             displayRightContent(topicTermdefs);
+        });
+
+        lessonsHolder.addEventListener('click', () => {
+            localStorage.setItem('currentTopic', topic.name);
+            localStorage.setItem('currentSubTopicType', 'lessons');
+            localStorage.setItem('currentSubTopic-topicId', topic.unique_string_id);
+            localStorage.setItem('currentSubTopic-id', `${topic.unique_string_id}-lessons`);
+            displayRightNavContent();
+            displayRightContent(topic.lessons);
         });
 
         topicItem.addEventListener('click', () => {
@@ -168,7 +192,7 @@ function displayTopics(topics) {
 };
 
 function toggleTopicDropdown(topic) {
-    const topicDropdown = document.getElementById(`${topic.id}-topic-dropdown`);
+    const topicDropdown = document.getElementById(`${topic.unique_string_id}-topic-dropdown`);
     if (topicDropdown) {
         topicDropdown.classList.toggle('hidden-dropdown');
     };
@@ -221,8 +245,8 @@ function displayRightNavContent() {
     const currentSubTopicType = localStorage.getItem('currentSubTopicType');
     const currentSubTopicId = localStorage.getItem('currentSubTopic-topicId');
 
-    const currentSubTopic = currentSubTopicType === 'notes' ? 'Notes' : currentSubTopicType === 'termdefs' ? 'Term/Definitions'  : '';
-    
+    const currentSubTopic = currentSubTopicType === 'notes' ? 'Notes' : currentSubTopicType === 'termdefs' ? 'Term/Definitions' : currentSubTopicType === 'lessons' ? 'Lesson' : '';
+
     const currentTopicOverSummary = currentSubTopicType === 'main-summary' ? 'Summary' : currentSubTopicType === 'main-overview' ? 'Overview' : '';
 
     if (currentSubTopic) {
@@ -279,23 +303,47 @@ function displayRightNavContent() {
 };
 
 function goToNextSubTopic() {
-    const currentSubTopic = localStorage.getItem('currentSubTopicType');
+    const currentSubTopicType = localStorage.getItem('currentSubTopicType');
     const currentSubTopicId = localStorage.getItem('currentSubTopic-topicId');
     const currentSubTopicFullId = localStorage.getItem('currentSubTopic-id');
 
     const topicDropdown = document.getElementById(`${currentSubTopicId}-topic-dropdown`);
-    const topicDropdownItems = topicDropdown.childNodes;
-    const topicDropdownItemsArray = Array.from(topicDropdownItems);
+    const overviewTopic = document.getElementById(`${unitId}-intro-topic`);
+    const summaryTopic = document.getElementById(`${unitId}-outro-topic`);
 
-    const nextSubTopicIndex = topicDropdownItemsArray.findIndex(item => item.id === currentSubTopicFullId) + 1;
-    const nextSubTopic = topicDropdownItemsArray[nextSubTopicIndex];
+    if (topicDropdown) {
+        const topicDropdownItems = topicDropdown.childNodes;
+        const topicDropdownItemsArray = Array.from(topicDropdownItems);
 
-    if (nextSubTopic) {
-        nextSubTopic.click();
-    } else {
-        const topicItemHolder = document.getElementById(`${currentSubTopicId}-topic-item-holder`);
-        const nextTopicItemHolder = topicItemHolder.nextElementSibling;
-        
+        const nextSubTopicIndex = topicDropdownItemsArray.findIndex(item => item.id === currentSubTopicFullId) + 1;
+        const nextSubTopic = topicDropdownItemsArray[nextSubTopicIndex];
+
+        if (nextSubTopic) {
+            nextSubTopic.click();
+        } else {
+            const topicItemHolder = document.getElementById(`${currentSubTopicId}-topic-item-holder`);
+            const nextTopicItemHolder = topicItemHolder.nextElementSibling;
+
+            if (nextTopicItemHolder) {
+                if (!nextTopicItemHolder.childNodes[1]) {
+                    const nextUnitConfirmation = confirm('Are you sure you want to move to the next unit?');
+                    if (nextUnitConfirmation) {
+                        window.location.href = `/${subjectId}/${classId}`;
+                    }
+                } else {
+                    const nextSubTopic = nextTopicItemHolder.childNodes[1].childNodes[0];
+                    if (nextSubTopic) {
+                        if (nextTopicItemHolder.childNodes[1].classList.contains('hidden-dropdown')) {
+                            nextTopicItemHolder.firstChild.click();
+                        }
+                        nextSubTopic.click();
+                    }
+                }
+            }
+        };
+    } else if (currentSubTopicType === 'main-overview') {
+        const nextTopicItemHolder = overviewTopic.nextElementSibling;
+
         if (nextTopicItemHolder) {
             const nextSubTopic = nextTopicItemHolder.childNodes[1].childNodes[0];
             if (nextSubTopic) {
@@ -304,6 +352,11 @@ function goToNextSubTopic() {
                 }
                 nextSubTopic.click();
             }
+        }
+    } else if (currentSubTopicType === 'main-summary') {
+        const nextUnitConfirmation = confirm('Are you sure you want to move to the next unit?');
+        if (nextUnitConfirmation) {
+            window.location.href = `/${subjectId}/${classId}`;
         }
     };
 };
@@ -314,7 +367,7 @@ function displayRightContent(content) {
 
     const currentSubTopicType = localStorage.getItem('currentSubTopicType');
 
-    const currentSubTopic = currentSubTopicType === 'notes' ? 'Notes' : 'Term/Definitions';
+    const currentSubTopic = currentSubTopicType === 'notes' ? 'Notes' : currentSubTopicType === 'termdefs' ? 'Term/Definitions' : currentSubTopicType === 'lessons' ? 'Lesson' : '';
     if (currentSubTopicType === 'notes') {
         content.forEach(note => {
             const noteHolder = document.createElement('ul');
@@ -364,56 +417,84 @@ function displayRightContent(content) {
             termdefHolder.appendChild(definitionHolder);
             rightContent.appendChild(termdefHolder);
         });
-    } else if (currentSubTopicType === 'main-overview') {
-        const unitOverview = document.createElement('dl');
-        unitOverview.classList.add('unit-overview');
+    } else if (currentSubTopicType === 'lessons') {
+        content.forEach(lesson => {
+            const currentSubTopicHolder = document.querySelector('.current-sub-topic-holder');
+            currentSubTopicHolder.innerText = `Lesson: ${lesson.name}`;
 
-        const unitDescriptionTitle = document.createElement('dt');
-        unitDescriptionTitle.classList.add('unit-description-title');
-        unitDescriptionTitle.innerText = 'Description:';
+            const lessonHolder = document.createElement('div');
+            lessonHolder.classList.add('lesson-holder');
 
-        const unitDescription = document.createElement('dd');
-        unitDescription.classList.add('unit-description');
-        unitDescription.innerText = content.description;
+            const lessonTitle = document.createElement('h2');
+            lessonTitle.classList.add('lesson-title');
+            lessonTitle.innerText = lesson.name;
 
-        const prerequisitesTitle = document.createElement('dt');
-        prerequisitesTitle.classList.add('prerequisites-title');
-        prerequisitesTitle.innerText = 'Prerequisites:';
+            const lessonDescription = document.createElement('p');
+            lessonDescription.classList.add('lesson-description');
+            lessonDescription.innerText = lesson.description;
 
-        const prerequisites = document.createElement('dd');
-        prerequisites.classList.add('prerequisites');
-        prerequisites.innerText = content.prerequisites;
+            const lessonContent = document.createElement('div');
+            lessonContent.classList.add('lesson-content');
+            lessonContent.innerHTML = lesson.lesson_content;
 
-        const learningObjectivesTitle = document.createElement('dt');
-        learningObjectivesTitle.classList.add('learning-objectives-title');
-        learningObjectivesTitle.innerText = 'Learning Objectives:';
-
-        const learningObjectives = document.createElement('ul');
-        learningObjectives.classList.add('learning-objectives');
-        content.learningObjectives.forEach(objective => {
-            const objectiveItem = document.createElement('li');
-            objectiveItem.classList.add('objective-item');
-            objectiveItem.innerText = objective;
-            learningObjectives.appendChild(objectiveItem);
+            lessonHolder.appendChild(lessonTitle);
+            lessonHolder.appendChild(lessonDescription);
+            lessonHolder.appendChild(lessonContent);
+            rightContent.appendChild(lessonHolder);
         });
+    } else if (currentSubTopicType === 'main-overview') {
+        content.forEach(con => {
+            const unitOverview = document.createElement('dl');
+            unitOverview.classList.add('unit-overview');
 
-        const unitOutcomeTitle = document.createElement('dt');
-        unitOutcomeTitle.classList.add('unit-outcome-title');
-        unitOutcomeTitle.innerText = 'Outcome:';
+            const unitDescriptionTitle = document.createElement('dt');
+            unitDescriptionTitle.classList.add('unit-description-title');
+            unitDescriptionTitle.innerText = 'Description:';
 
-        const unitOutcome = document.createElement('dd');
-        unitOutcome.classList.add('unit-outcome');
-        unitOutcome.innerText = content.unitOutcome;
+            const unitDescription = document.createElement('dd');
+            unitDescription.classList.add('unit-description');
+            unitDescription.innerText = con.description;
 
-        unitOverview.appendChild(unitDescriptionTitle);
-        unitOverview.appendChild(unitDescription);
-        unitOverview.appendChild(prerequisitesTitle);
-        unitOverview.appendChild(prerequisites);
-        unitOverview.appendChild(learningObjectivesTitle);
-        unitOverview.appendChild(learningObjectives);
-        unitOverview.appendChild(unitOutcomeTitle);
-        unitOverview.appendChild(unitOutcome);
-        rightContent.appendChild(unitOverview);
+            const prerequisitesTitle = document.createElement('dt');
+            prerequisitesTitle.classList.add('prerequisites-title');
+            prerequisitesTitle.innerText = 'Prerequisites:';
+
+            const prerequisites = document.createElement('dd');
+            prerequisites.classList.add('prerequisites');
+            prerequisites.innerText = con.prerequisites;
+
+            const learningObjectivesTitle = document.createElement('dt');
+            learningObjectivesTitle.classList.add('learning-objectives-title');
+            learningObjectivesTitle.innerText = 'Learning Objectives:';
+
+            const learningObjectives = document.createElement('ul');
+            learningObjectives.classList.add('learning-objectives');
+
+            con.learning_objectives.forEach(objective => {
+                const objectiveItem = document.createElement('li');
+                objectiveItem.classList.add('objective-item');
+                objectiveItem.innerText = objective;
+                learningObjectives.appendChild(objectiveItem);
+            });
+
+            const unitOutcomeTitle = document.createElement('dt');
+            unitOutcomeTitle.classList.add('unit-outcome-title');
+            unitOutcomeTitle.innerText = 'Outcome:';
+
+            const unitOutcome = document.createElement('dd');
+            unitOutcome.classList.add('unit-outcome');
+            unitOutcome.innerText = con.unit_outcomes;
+
+            unitOverview.appendChild(unitDescriptionTitle);
+            unitOverview.appendChild(unitDescription);
+            unitOverview.appendChild(prerequisitesTitle);
+            unitOverview.appendChild(prerequisites);
+            unitOverview.appendChild(learningObjectivesTitle);
+            unitOverview.appendChild(learningObjectives);
+            unitOverview.appendChild(unitOutcomeTitle);
+            unitOverview.appendChild(unitOutcome);
+            rightContent.appendChild(unitOverview);
+        });
     } else if (currentSubTopicType === 'main-summary') {
         // want to have total number of notes and termdefs
         // all topic names
