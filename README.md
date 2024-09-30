@@ -4,7 +4,7 @@ Submitted by: **Ricki Beckless**
 
 About this web app: **This is v2 of StudyGo, now with a PostgreSQL database. This app is designed to provide users with an organized view of subjects, classes, and associated units in an educational context. Users can fetch and explore subjects, each of which can expand to reveal related classes and units. The app features a dynamic dropdown menu that displays classes when a subject is clicked, and further expands to show units upon selecting a class. Interactive elements such as links for viewing all classes are also included, enhancing navigation.**
 
-Time spent: **20** hours
+Time spent: **30** hours
 
 ## Required Features
 
@@ -28,7 +28,10 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented required features:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+![StudyGo](https://i.ibb.co/HxNf664/Code-Path-Study-Go-p2-Walkthrough.gif)
+
+GIF also found at [StudyGo](https://i.ibb.co/HxNf664/Code-Path-Study-Go-p2-Walkthrough.gif) on ImgBB
+
 
 GIF created with [ScreenToGif](https://www.screentogif.com/)
 

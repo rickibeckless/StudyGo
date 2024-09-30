@@ -1,3 +1,69 @@
+document.getElementById('subject-search-btn').addEventListener('click', performSearch);
+document.getElementById('subject-filter-btn').addEventListener('click', applyFilters);
+
+async function performSearch() {
+    const searchTerm = document.getElementById('subjects-search').value.toLowerCase();
+    if (!searchTerm) return;
+
+    const res = await fetch('/api/subjects');
+    const subjects = await res.json();
+
+    const subjectList = document.getElementById('subject-list');
+    subjectList.innerHTML = '';
+
+    subjects.forEach(subject => {
+        if (subject.name.toLowerCase().includes(searchTerm)) {
+            displaySubject(subject);
+        } else {
+            fetch(`/api/classes/${subject.unique_string_id}`).then(res => res.json()).then(classes => {
+                let matchedClass = classes.find(cls => cls.name.toLowerCase().includes(searchTerm));
+                if (matchedClass) {
+                    displaySubject(subject);
+                } else {
+                    classes.forEach(cls => {
+                        fetch(`/api/classes/${subject.unique_string_id}/${cls.unique_string_id}`).then(res => res.json()).then(units => {
+                            let matchedUnit = units.find(unit => unit.name.toLowerCase().includes(searchTerm));
+                            if (matchedUnit) {
+                                displaySubject(subject);
+                            }
+                        });
+                    });
+                }
+            });
+        }
+    });
+};
+
+async function applyFilters() {
+    const filterCriteria = document.getElementById('subjects-filter').value;
+    const filterOrder = document.getElementById('subjects-filter-order').value;
+    //const showEmpty = document.getElementById('subjects-filter-show-empty').checked;
+
+    const res = await fetch('/api/subjects');
+    let subjects = await res.json();
+
+    console.log(filterCriteria, filterOrder);
+    console.log(subjects);
+
+    if (filterCriteria === 'alphabetical') {
+        subjects.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+    } else if (filterCriteria === 'date-added') {
+        subjects.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
+    } else if (filterCriteria === 'date-updated') {
+        subjects.sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
+    }
+
+    if (filterOrder === 'desc') {
+        subjects.reverse();
+    }
+
+    console.log(subjects);
+
+    const subjectList = document.getElementById('subject-list');
+    subjectList.innerHTML = '';
+    subjects.forEach(subject => displaySubject(subject));
+};
+
 async function fetchSubjects() {
     const res = await fetch('/api/subjects');
     const subjects = await res.json();
@@ -128,7 +194,8 @@ async function displaySubject(subject) {
     subHolder.appendChild(subDescription);
     subList.appendChild(subHolder);
     subHolder.appendChild(classDropdown);
-    defaultLi.style.display = 'none';
+
+    if (defaultLi) defaultLi.style.display = 'none';
 };
 
 function displayClass(classes) {

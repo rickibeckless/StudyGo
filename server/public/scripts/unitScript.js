@@ -165,6 +165,7 @@ function displayTopics(topics) {
                 localStorage.setItem('currentTopic', topic.name);
                 localStorage.setItem('currentSubTopicType', 'lesson');
                 localStorage.setItem('currentSubTopic-topicId', topic.unique_string_id);
+                localStorage.setItem('currentLessonIndex', index);
                 localStorage.setItem('currentSubTopic-id', `${topic.unique_string_id}-lesson-${index}`);
                 displayRightNavContent();
                 displayRightContent([lesson]);
@@ -275,9 +276,8 @@ function displayRightNavContent() {
         currentSubTopicHolder.classList.add('current-sub-topic-holder');
 
         if (currentSubTopic === 'Lesson') {
-            const currentSubTopicFullId = localStorage.getItem('currentSubTopic-id');
-            const lessonIndex = currentSubTopicFullId.split('-')[3];
-            currentSubTopicHolder.innerText = `Lesson ${parseInt(lessonIndex) + 1}`;
+            const currentLessonIndex = localStorage.getItem('currentLessonIndex');
+            currentSubTopicHolder.innerText = `Lesson ${parseInt(currentLessonIndex) + 1}`;
         } else {
             currentSubTopicHolder.innerText = currentSubTopic;
         };
