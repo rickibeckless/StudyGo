@@ -76,7 +76,9 @@ const createTopicsTable = async () => {
 
     const addColumnQuery = `
         ALTER TABLE topics 
-        ADD COLUMN IF NOT EXISTS lessons JSONB NOT NULL DEFAULT '[]';
+        DROP COLUMN IF EXISTS lessons;
+        ALTER TABLE topics
+        ADD COLUMN IF NOT EXISTS lessons JSONB DEFAULT '[]';
     `;
 
     try {

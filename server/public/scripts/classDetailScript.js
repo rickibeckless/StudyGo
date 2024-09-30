@@ -41,17 +41,18 @@ async function displayClassPage(subjectId, classId) {
     classUpdatedDate.innerHTML = `Updated: <span>${convertDate(currentClass.date_updated)}</span>`;
 
     const classDescription = document.createElement('p');
+    classDescription.id = 'class-description';
     classDescription.innerText = `${currentClass.description}`;
 
     displayUnits(subjectId, classId, currentClass);
-    
+
     classHeader.appendChild(classTitle);
     classHeader.appendChild(classStatsHolder);
+    classHeader.appendChild(classDescription);
     classStatsHolder.appendChild(classCreatedDate);
     classStatsHolder.appendChild(classUpdatedDate);
     classSection.appendChild(classHeader);
-    classSection.appendChild(classDescription);
-    mainBody.appendChild(classSection); 
+    mainBody.appendChild(classSection);
 };
 
 async function displayUnits(subjectId, classId, currentClass) {
@@ -72,7 +73,8 @@ async function displayUnits(subjectId, classId, currentClass) {
         unitHolder.id = `${unit.unique_string_id}-unit-holder`;
         unitHolder.classList.add('unit-holder');
 
-        const unitName = document.createElement('li');
+        const unitName = document.createElement('a');
+        unitName.href = `/${unit.subjectid}/${unit.classid}/${unit.unique_string_id}`;
         unitName.classList.add('unit-name');
         unitName.innerText = unit.name;
 
@@ -101,15 +103,12 @@ async function displayTopics(subjectId, classId, unit) {
 
     topics.forEach(topic => {
         const topicHolder = document.createElement('div');
-        console.log(topic.unique_string_id)
         topicHolder.id = `${topic.unique_string_id}-topic-holder`;
         topicHolder.classList.add('topic-holder');
 
         const topicName = document.createElement('li');
-        topicName.classList.add('topic-item');
+        topicName.classList.add('topic-name');
         topicName.innerText = topic.name;
-
-        // add in a button to add a new lesson
 
         const addLessonButton = document.createElement('button');
         addLessonButton.classList.add('add-lesson-button');
@@ -138,32 +137,30 @@ async function displayTopics(subjectId, classId, unit) {
 
 async function displaySubTopics(subjectId, classId, unit, topic, topicHolder) {
     const subTopics = [topic.lessons, topic.notes, topic.terms_defs].flat();
-    console.log('subTopics', subTopics);
-
-    console.log(topic.unique_string_id)
 
     const subTopicList = document.createElement('ul');
     subTopicList.classList.add('sub-topic-list');
 
-    if (topic.lessons.length > 0) {
-        const topicLessonItem = document.createElement('li');
-        topicLessonItem.classList.add('sub-topic-item');
-        topicLessonItem.innerText = 'Lesson';
-
-        subTopicList.appendChild(topicLessonItem);
-    }
-
-    // will display a for each lesson, lesson name and description
-    // will display number of notes and terms/defs
-
     topic.lessons.forEach(lesson => {
         const lessonHolder = document.createElement('div');
-        lessonHolder.id = `${lesson.unique_string_id}-lesson-holder`;
+        lessonHolder.id = `${topic.unique_string_id}-lesson-holder`;
         lessonHolder.classList.add('lesson-holder');
 
         const lessonName = document.createElement('li');
         lessonName.classList.add('lesson-name');
-        lessonName.innerText = lesson.name;
+        lessonName.innerText = `Lesson: ${lesson.name}`;
+
+        const deleteLessonButton = document.createElement('button');
+        deleteLessonButton.classList.add('delete-lesson-button');
+        deleteLessonButton.title = 'Delete Lesson';
+        deleteLessonButton.innerText = 'Delete Lesson';
+
+        deleteLessonButton.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            openDeleteLessonModal(subjectId, classId, unit, topic, lesson);
+        });
+
+        lessonName.appendChild(deleteLessonButton);
 
         const lessonDescription = document.createElement('p');
         lessonDescription.classList.add('lesson-description');
@@ -178,7 +175,7 @@ async function displaySubTopics(subjectId, classId, unit, topic, topicHolder) {
     const topicTermsDefsNumber = topic.terms_defs.length;
 
     subTopics.forEach(subTopic => {
-        console.log('subTopic', subTopic);
+        //console.log('subTopic', subTopic);
     });
 
     topicHolder.appendChild(subTopicList);
@@ -215,7 +212,31 @@ function openLessonFormModal(subjectId, classId, unit, topic) {
     lessonContentContainer.style.height = '200px';
     form.appendChild(lessonContentContainer);
 
+    const toolbarOptions = [
+        ['bold', 'italic', 'underline', 'strike'],
+        ['blockquote', 'code-block'],
+        ['link', 'image', 'video', 'formula'],
+
+        [{ 'header': 1 }, { 'header': 2 }],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
+        [{ 'script': 'sub' }, { 'script': 'super' }],
+        [{ 'indent': '-1' }, { 'indent': '+1' }],
+        [{ 'direction': 'rtl' }],
+
+        [{ 'size': ['small', false, 'large', 'huge'] }],
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+        [{ 'color': [] }, { 'background': [] }],
+        [{ 'font': [] }],
+        [{ 'align': [] }],
+
+        ['clean']
+    ];
+
     const quill = new Quill(lessonContentContainer, {
+        modules: {
+            toolbar: toolbarOptions
+        },
         theme: 'snow'
     });
 
@@ -270,4 +291,70 @@ function openLessonFormModal(subjectId, classId, unit, topic) {
             alert('Error adding lesson');
         }
     });
-}
+};
+
+function openDeleteLessonModal(subjectId, classId, unit, topic, lesson) {
+    const modal = document.createElement('div');
+    modal.id = 'classModal';
+
+    const modalOverlay = document.createElement('div');
+    modalOverlay.id = 'modalOverlay';
+    document.body.appendChild(modalOverlay);
+
+    const form = document.createElement('form');
+    form.id = 'classForm';
+
+    const lessonContentHTMLSpliced = lesson.lesson_content.slice(0, 100);
+
+    const deleteMessage = document.createElement('p');
+    deleteMessage.id = 'deleteMessage';
+    deleteMessage.innerText = `Are you sure you want to delete the lesson: "${lesson.name}" with the content: "${lessonContentHTMLSpliced}..."?`;
+
+    form.appendChild(deleteMessage);
+
+    const submitButton = document.createElement('button');
+    submitButton.id = 'modalSubmitButton';
+    submitButton.type = 'submit';
+    submitButton.innerText = 'Delete Lesson';
+    form.appendChild(submitButton);
+
+    const closeButton = document.createElement('button');
+    closeButton.id = 'modalCloseButton';
+    closeButton.innerText = 'Close';
+    closeButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.body.removeChild(modal);
+        document.body.removeChild(modalOverlay);
+    });
+    form.appendChild(closeButton);
+
+    modal.appendChild(form);
+    document.body.appendChild(modal);
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        try {
+            const res = await fetch(`/api/topics/${subjectId}/${classId}/${unit.unique_string_id}/${topic.unique_string_id}/delete-lesson`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ lessonId: lesson.unique_string_id }),
+            });
+
+            if (res.ok) {
+                const result = await res.json();
+                alert('Lesson deleted successfully!');
+            } else {
+                alert('Error deleting lesson');
+            }
+
+            document.body.removeChild(modal);
+            document.body.removeChild(modalOverlay);
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error deleting lesson');
+        }
+    });
+};

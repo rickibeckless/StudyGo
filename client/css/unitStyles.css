@@ -434,10 +434,70 @@ button {
     padding-bottom: 0.5rem;
 }
 
+.lesson-content h4 {
+    font-size: 1.3rem;
+    color: #333333;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.lesson-content p {
+    margin-bottom: 1rem;
+}
+
+.lesson-content code {
+    background-color: #f2f2f2;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.3rem;
+    font-size: 1rem;
+}
+
 .lesson-content ol,
 .lesson-content ul {
     margin-left: 2rem; 
     margin-bottom: 1rem;
+}
+
+.lesson-content li[data-list="bullet"] {
+    list-style-type: disc;
+}
+
+.lesson-content li[data-list="ordered"] {
+    list-style-type: disclosure-closed;
+}
+
+.lesson-content .ql-code-block-container {
+    width: 100%;
+    text-align: center;
+}
+
+.lesson-content .ql-code-block-container .ql-indent-1,
+.lesson-content .ql-code-block-container .ql-indent-2,
+.lesson-content .ql-code-block-container .ql-indent-3,
+.lesson-content .ql-code-block-container .ql-indent-4 {
+    list-style-type: none;
+    margin: 0 0.5rem;
+}
+
+.lesson-content .ql-indent-1 {
+    margin-left: 2rem;
+}
+
+.lesson-content .ql-indent-2 {
+    margin-left: 6rem;
+}
+
+.lesson-content li[data-list="bullet"].ql-indent-2 {
+    margin-left: 4rem;
+    list-style-type: circle;
+}
+
+.lesson-content .ql-indent-3 {
+    margin-left: 6rem;
+}
+
+.lesson-content .ql-indent-4 {
+    margin-left: 8rem;
 }
 
 .lesson-content li {

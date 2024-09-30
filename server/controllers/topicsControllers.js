@@ -1,4 +1,5 @@
 import { pool } from '../config/database.js';
+import { generateUniqueStringId, getAllUniqueIds } from '../data/allUniqueIds.js';
 // import topicsData from '../data/topics.js';
 
 export const getTopics = async (req, res) => {
@@ -40,7 +41,20 @@ export const addTopic = async (req, res) => {
 export const addLessonToTopic = async (req, res) => {
     try {
         const { topicId } = req.params;
-        const { lesson } = req.body;
+        let { lesson } = req.body;
+
+        const newUniqueId = generateUniqueStringId();
+
+        const existingUniqueIds = await getAllUniqueIds();
+
+        if (existingUniqueIds.includes(newUniqueId)) {
+            return res.status(400).json({ message: 'The unique_string_id already exists.' });
+        }
+
+        lesson = {
+            ...lesson,
+            unique_string_id: newUniqueId
+        };
 
         const results = await pool.query(
             'UPDATE topics SET lessons = lessons || $1::jsonb WHERE unique_string_id = $2 RETURNING *',
@@ -55,6 +69,35 @@ export const addLessonToTopic = async (req, res) => {
     } catch (error) {
         console.error('Error adding lesson to topic:', error);
         res.status(500).json({ message: 'Error adding lesson to topic', error });
+    }
+};
+
+export const deleteLessonFromTopic = async (req, res) => {
+    try {
+        const { topicId } = req.params;
+        const { lessonId } = req.body;
+
+        const query = `
+            UPDATE topics 
+            SET lessons = (
+                SELECT jsonb_agg(lesson) 
+                FROM jsonb_array_elements(lessons) AS lesson 
+                WHERE lesson->>'unique_string_id' != $1
+            ) 
+            WHERE unique_string_id = $2
+            RETURNING *;
+        `;
+
+        const results = await pool.query(query, [lessonId, topicId]);
+
+        if (results.rowCount === 0) {
+            return res.status(404).json({ message: 'Topic or lesson not found' });
+        }
+
+        res.status(200).json(results.rows);
+    } catch (error) {
+        console.error('Error deleting lesson from topic:', error);
+        res.status(500).json({ message: 'Error deleting lesson from topic', error });
     }
 };
 
